@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name sampleLib index.js"
+    "build": "vue-cli-service build --target lib --name test-app-flamento index.js"
   },
   "files": [
     "dist/*",
@@ -12,7 +12,7 @@
     "*.json",
     "*.js"
   ],
-  "main": "./dist/sampleLib.common.js",
+  "main": "./dist/test-app-flamento.common.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "swiper": "^7.0.1",
