@@ -21,6 +21,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../../assets/scss/alexa/all";
+<style>
+@import "../../assets/scss/alexa/all.css";
 </style>
