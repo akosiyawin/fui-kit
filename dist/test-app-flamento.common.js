@@ -230,14 +230,14 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "254f":
+/***/ "223c":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ "2b74":
+/***/ "254f":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -816,17 +816,6 @@ module.exports = {
   // https://github.com/tc39/proposal-array-filtering
   filterReject: createMethod(7)
 };
-
-
-/***/ }),
-
-/***/ "b78a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2b74");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -2699,12 +2688,15 @@ var FuiAlexaNavbar_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaNavbar = (FuiAlexaNavbar_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"fd45d7f2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=092d6be2&
-var FuiAlexaAppvue_type_template_id_092d6be2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"main fui__alexa"},[_vm._t("default",function(){return [_vm._v("Nothing to see here!")]})],2)}
-var FuiAlexaAppvue_type_template_id_092d6be2_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"fd45d7f2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=394aa314&
+var FuiAlexaAppvue_type_template_id_394aa314_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"main fui__alexa"},[_vm._t("default",function(){return [_vm._v("Nothing to see here!")]})],2)}
+var FuiAlexaAppvue_type_template_id_394aa314_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=092d6be2&
+// CONCATENATED MODULE: ./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=394aa314&
+
+// EXTERNAL MODULE: ./src/assets/scss/alexa/all.css
+var alexa_all = __webpack_require__("223c");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaApp.vue?vue&type=script&lang=js&
 //
@@ -2714,6 +2706,7 @@ var FuiAlexaAppvue_type_template_id_092d6be2_staticRenderFns = []
 //
 //
 //
+
 /* harmony default export */ var FuiAlexaAppvue_type_script_lang_js_ = ({
   name: 'FuiAlexaApp',
   props: {
@@ -2728,11 +2721,7 @@ var FuiAlexaAppvue_type_template_id_092d6be2_staticRenderFns = []
 });
 // CONCATENATED MODULE: ./src/components/alexa/FuiAlexaApp.vue?vue&type=script&lang=js&
  /* harmony default export */ var alexa_FuiAlexaAppvue_type_script_lang_js_ = (FuiAlexaAppvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/alexa/FuiAlexaApp.vue?vue&type=style&index=0&lang=css&
-var FuiAlexaAppvue_type_style_index_0_lang_css_ = __webpack_require__("b78a");
-
 // CONCATENATED MODULE: ./src/components/alexa/FuiAlexaApp.vue
-
 
 
 
@@ -2742,8 +2731,8 @@ var FuiAlexaAppvue_type_style_index_0_lang_css_ = __webpack_require__("b78a");
 
 var FuiAlexaApp_component = normalizeComponent(
   alexa_FuiAlexaAppvue_type_script_lang_js_,
-  FuiAlexaAppvue_type_template_id_092d6be2_render,
-  FuiAlexaAppvue_type_template_id_092d6be2_staticRenderFns,
+  FuiAlexaAppvue_type_template_id_394aa314_render,
+  FuiAlexaAppvue_type_template_id_394aa314_staticRenderFns,
   false,
   null,
   null,
