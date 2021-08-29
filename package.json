@@ -15,6 +15,7 @@
   "main": "./dist/test-app-flamento.common.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "scrollreveal": "^4.0.9",
     "swiper": "^7.0.1",
     "vue": "^2.6.11"
   },
