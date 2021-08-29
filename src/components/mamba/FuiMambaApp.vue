@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import ScrollReveal from 'scrollreveal'
 export default {
   name: "FuiMambaApp",
   props: {
