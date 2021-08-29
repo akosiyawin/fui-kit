@@ -1,19 +1,11 @@
-# test-app
+# fui-kit
 
-## Project setup
-```
-npm install
-```
+## Project Installation
 
-### Compiles and hot-reloads for development
 ```
-npm run serve
+npm install fui-kit
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+**Thats it, Happy Coding!**
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+I will setup the readme later.
