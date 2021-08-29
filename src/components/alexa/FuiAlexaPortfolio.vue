@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import Swiper from 'swiper/swiper-bundle.min.js';
+import Swiper from 'swiper/swiper-bundle.min';
 
 export default {
   name: "FuiAlexaPortfolio",

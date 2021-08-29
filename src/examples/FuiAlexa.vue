@@ -12,7 +12,7 @@ import {
   FuiAlexaHome,
   FuiAlexaNavbar,
   FuiAlexaApp
-} from "../index.js";
+} from "../../index.js";
 import FuiAlexaScrollbarTheme from "../components/alexa/FuiAlexaScrollbarTheme";
 import FuiAlexaTheme from "../components/alexa/FuiAlexaTheme";
 export default {

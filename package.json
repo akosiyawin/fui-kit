@@ -1,0 +1,28 @@
+{
+  "name": "test-app-flamento",
+  "version": "0.1.0",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --target lib --name sampleLib index.js"
+  },
+  "files": [
+    "dist/*",
+    "src/*",
+    "public/*",
+    "*.json",
+    "*.js"
+  ],
+  "main": "./dist/sampleLib.common.js",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "swiper": "^7.0.1",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "_id": "test-app-flamento@0.1.0",
+  "readme": "ERROR: No README data found!"
+}
