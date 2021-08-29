@@ -1,9 +1,28 @@
 {
-  "name": "test-app-flamento",
-  "version": "0.1.10",
+  "name": "fui-kit",
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name test-app-flamento index.js"
+    "build": "vue-cli-service build --target lib --name fui-kit index.js"
+  },
+  "description": "Flamento UI Kit for Lazy developers like me. A collection of various designs from the internet was put together.",
+  "keywords": [
+    "Flamento",
+    "Flamento UI",
+    "UI",
+    "Flamento UI Kit",
+    "flamento kit",
+    "ui kit",
+    "fui-kit"
+  ],
+  "author": {
+    "email": "akosiyawin@gmail.com",
+    "name": "Darwin Marcelo"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akosiyawin/fui-kit.git"
   },
   "files": [
     "dist/*",
@@ -12,7 +31,7 @@
     "*.json",
     "*.js"
   ],
-  "main": "./dist/test-app-flamento.common.js",
+  "main": "./dist/fui-kit.common.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "scrollreveal": "^4.0.9",
@@ -26,6 +45,6 @@
     "sass-loader": "^10",
     "vue-template-compiler": "^2.6.11"
   },
-  "_id": "test-app-flamento@0.1.0",
+  "_id": "fui-kit@1.0.0",
   "readme": "ERROR: No README data found!"
 }
