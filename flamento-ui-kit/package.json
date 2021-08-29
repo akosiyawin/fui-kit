@@ -1,7 +1,24 @@
 {
   "name": "flamento-ui-kit",
   "version": "1.0.1",
-  "description": "",
+  "description": "Flamento UI Kit for Lazy developers like me.",
+  "keywords": [
+    "Flamento",
+    "Flamento UI",
+    "UI",
+    "Flamento UI Kit",
+    "flamento kit",
+    "ui kit"
+  ],
+  "author": {
+    "email": "akosiyawin@gmail.com",
+    "name": "Darwin Marcelo"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akosiyawin/flamento-ui-kit.git"
+  },
   "main": "dist/flamento-ui-kit.ssr.js",
   "browser": "dist/flamento-ui-kit.esm.js",
   "module": "dist/flamento-ui-kit.esm.js",
