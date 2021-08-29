@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["test-app-flamento"] = factory();
+		exports["fui-kit"] = factory();
 	else
-		root["test-app-flamento"] = factory();
+		root["fui-kit"] = factory();
 })((typeof self !== 'undefined' ? self : this), function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -127,6 +127,34 @@ module.exports = function (fn, that, length) {
 
 /***/ }),
 
+/***/ "06cf":
+/***/ (function(module, exports, __webpack_require__) {
+
+var DESCRIPTORS = __webpack_require__("83ab");
+var propertyIsEnumerableModule = __webpack_require__("d1e7");
+var createPropertyDescriptor = __webpack_require__("5c6c");
+var toIndexedObject = __webpack_require__("fc6a");
+var toPropertyKey = __webpack_require__("a04b");
+var has = __webpack_require__("5135");
+var IE8_DOM_DEFINE = __webpack_require__("0cfb");
+
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+
+// `Object.getOwnPropertyDescriptor` method
+// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+  O = toIndexedObject(O);
+  P = toPropertyKey(P);
+  if (IE8_DOM_DEFINE) try {
+    return $getOwnPropertyDescriptor(O, P);
+  } catch (error) { /* empty */ }
+  if (has(O, P)) return createPropertyDescriptor(!propertyIsEnumerableModule.f.call(O, P), O[P]);
+};
+
+
+/***/ }),
+
 /***/ "0b42":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -154,6 +182,54 @@ module.exports = function (originalArray) {
 
 /***/ }),
 
+/***/ "0cb2":
+/***/ (function(module, exports, __webpack_require__) {
+
+var toObject = __webpack_require__("7b0b");
+
+var floor = Math.floor;
+var replace = ''.replace;
+var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
+
+// `GetSubstitution` abstract operation
+// https://tc39.es/ecma262/#sec-getsubstitution
+module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
+  var tailPos = position + matched.length;
+  var m = captures.length;
+  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+  if (namedCaptures !== undefined) {
+    namedCaptures = toObject(namedCaptures);
+    symbols = SUBSTITUTION_SYMBOLS;
+  }
+  return replace.call(replacement, symbols, function (match, ch) {
+    var capture;
+    switch (ch.charAt(0)) {
+      case '$': return '$';
+      case '&': return matched;
+      case '`': return str.slice(0, position);
+      case "'": return str.slice(tailPos);
+      case '<':
+        capture = namedCaptures[ch.slice(1, -1)];
+        break;
+      default: // \d\d?
+        var n = +ch;
+        if (n === 0) return match;
+        if (n > m) {
+          var f = floor(n / 10);
+          if (f === 0) return match;
+          if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
+          return match;
+        }
+        capture = captures[n - 1];
+    }
+    return capture === undefined ? '' : capture;
+  });
+};
+
+
+/***/ }),
+
 /***/ "0cfb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -168,6 +244,64 @@ module.exports = !DESCRIPTORS && !fails(function () {
     get: function () { return 7; }
   }).a != 7;
 });
+
+
+/***/ }),
+
+/***/ "0d23":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaTheme_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("dea2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaTheme_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaTheme_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
+/***/ "107c":
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__("d039");
+var global = __webpack_require__("da84");
+
+// babel-minify and Closure Compiler transpiles RegExp('(?<a>b)', 'g') -> /(?<a>b)/g and it causes SyntaxError
+var $RegExp = global.RegExp;
+
+module.exports = fails(function () {
+  var re = $RegExp('(?<a>b)', 'g');
+  return re.exec('b').groups.a !== 'b' ||
+    'b'.replace(re, '$<a>c') !== 'bc';
+});
+
+
+/***/ }),
+
+/***/ "14c3":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof = __webpack_require__("c6b6");
+var regexpExec = __webpack_require__("9263");
+
+// `RegExpExec` abstract operation
+// https://tc39.es/ecma262/#sec-regexpexec
+module.exports = function (R, S) {
+  var exec = R.exec;
+  if (typeof exec === 'function') {
+    var result = exec.call(R, S);
+    if (typeof result !== 'object') {
+      throw TypeError('RegExp exec method returned something other than an Object or null');
+    }
+    return result;
+  }
+
+  if (classof(R) !== 'RegExp') {
+    throw TypeError('RegExp#exec called on incompatible receiver');
+  }
+
+  return regexpExec.call(R, S);
+};
+
 
 
 /***/ }),
@@ -214,6 +348,16 @@ module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */) {
 
 /***/ }),
 
+/***/ "1be4":
+/***/ (function(module, exports, __webpack_require__) {
+
+var getBuiltIn = __webpack_require__("d066");
+
+module.exports = getBuiltIn('document', 'documentElement');
+
+
+/***/ }),
+
 /***/ "1c0b":
 /***/ (function(module, exports) {
 
@@ -234,6 +378,104 @@ module.exports = function (it) {
 module.exports = function (it) {
   if (it == undefined) throw TypeError("Can't call method on " + it);
   return it;
+};
+
+
+/***/ }),
+
+/***/ "23cb":
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__("a691");
+
+var max = Math.max;
+var min = Math.min;
+
+// Helper for a popular repeating case of the spec:
+// Let integer be ? ToInteger(index).
+// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
+module.exports = function (index, length) {
+  var integer = toInteger(index);
+  return integer < 0 ? max(integer + length, 0) : min(integer, length);
+};
+
+
+/***/ }),
+
+/***/ "23e7":
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__("da84");
+var getOwnPropertyDescriptor = __webpack_require__("06cf").f;
+var createNonEnumerableProperty = __webpack_require__("9112");
+var redefine = __webpack_require__("6eeb");
+var setGlobal = __webpack_require__("ce4e");
+var copyConstructorProperties = __webpack_require__("e893");
+var isForced = __webpack_require__("94ca");
+
+/*
+  options.target      - name of the target object
+  options.global      - target is the global object
+  options.stat        - export as static methods of target
+  options.proto       - export as prototype methods of target
+  options.real        - real prototype method for the `pure` version
+  options.forced      - export even if the native feature is available
+  options.bind        - bind methods to the target, required for the `pure` version
+  options.wrap        - wrap constructors to preventing global pollution, required for the `pure` version
+  options.unsafe      - use the simple assignment of property instead of delete + defineProperty
+  options.sham        - add a flag to not completely full polyfills
+  options.enumerable  - export as enumerable property
+  options.noTargetGet - prevent calling a getter on target
+*/
+module.exports = function (options, source) {
+  var TARGET = options.target;
+  var GLOBAL = options.global;
+  var STATIC = options.stat;
+  var FORCED, target, key, targetProperty, sourceProperty, descriptor;
+  if (GLOBAL) {
+    target = global;
+  } else if (STATIC) {
+    target = global[TARGET] || setGlobal(TARGET, {});
+  } else {
+    target = (global[TARGET] || {}).prototype;
+  }
+  if (target) for (key in source) {
+    sourceProperty = source[key];
+    if (options.noTargetGet) {
+      descriptor = getOwnPropertyDescriptor(target, key);
+      targetProperty = descriptor && descriptor.value;
+    } else targetProperty = target[key];
+    FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? '.' : '#') + key, options.forced);
+    // contained in target
+    if (!FORCED && targetProperty !== undefined) {
+      if (typeof sourceProperty === typeof targetProperty) continue;
+      copyConstructorProperties(sourceProperty, targetProperty);
+    }
+    // add a flag to not completely full polyfills
+    if (options.sham || (targetProperty && targetProperty.sham)) {
+      createNonEnumerableProperty(sourceProperty, 'sham', true);
+    }
+    // extend global
+    redefine(target, key, sourceProperty, options);
+  }
+};
+
+
+/***/ }),
+
+/***/ "241c":
+/***/ (function(module, exports, __webpack_require__) {
+
+var internalObjectKeys = __webpack_require__("ca84");
+var enumBugKeys = __webpack_require__("7839");
+
+var hiddenKeys = enumBugKeys.concat('length', 'prototype');
+
+// `Object.getOwnPropertyNames` method
+// https://tc39.es/ecma262/#sec-object.getownpropertynames
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+  return internalObjectKeys(O, hiddenKeys);
 };
 
 
@@ -281,12 +523,47 @@ module.exports = version && +version;
 
 /***/ }),
 
+/***/ "2e5a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9c67");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaApp_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "342f":
 /***/ (function(module, exports, __webpack_require__) {
 
 var getBuiltIn = __webpack_require__("d066");
 
 module.exports = getBuiltIn('navigator', 'userAgent') || '';
+
+
+/***/ }),
+
+/***/ "37e8":
+/***/ (function(module, exports, __webpack_require__) {
+
+var DESCRIPTORS = __webpack_require__("83ab");
+var definePropertyModule = __webpack_require__("9bf2");
+var anObject = __webpack_require__("825a");
+var objectKeys = __webpack_require__("df75");
+
+// `Object.defineProperties` method
+// https://tc39.es/ecma262/#sec-object.defineproperties
+// eslint-disable-next-line es/no-object-defineproperties -- safe
+module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = objectKeys(Properties);
+  var length = keys.length;
+  var index = 0;
+  var key;
+  while (length > index) definePropertyModule.f(O, key = keys[index++], Properties[key]);
+  return O;
+};
 
 
 /***/ }),
@@ -360,6 +637,45 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
 
 /***/ }),
 
+/***/ "4d64":
+/***/ (function(module, exports, __webpack_require__) {
+
+var toIndexedObject = __webpack_require__("fc6a");
+var toLength = __webpack_require__("50c4");
+var toAbsoluteIndex = __webpack_require__("23cb");
+
+// `Array.prototype.{ indexOf, includes }` methods implementation
+var createMethod = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIndexedObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare -- NaN check
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare -- NaN check
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) {
+      if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+module.exports = {
+  // `Array.prototype.includes` method
+  // https://tc39.es/ecma262/#sec-array.prototype.includes
+  includes: createMethod(true),
+  // `Array.prototype.indexOf` method
+  // https://tc39.es/ecma262/#sec-array.prototype.indexof
+  indexOf: createMethod(false)
+};
+
+
+/***/ }),
+
 /***/ "4dd8":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -401,6 +717,141 @@ module.exports = Object.hasOwn || function hasOwn(it, key) {
 
 /***/ }),
 
+/***/ "5319":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var fixRegExpWellKnownSymbolLogic = __webpack_require__("d784");
+var fails = __webpack_require__("d039");
+var anObject = __webpack_require__("825a");
+var toInteger = __webpack_require__("a691");
+var toLength = __webpack_require__("50c4");
+var toString = __webpack_require__("577e");
+var requireObjectCoercible = __webpack_require__("1d80");
+var advanceStringIndex = __webpack_require__("8aa5");
+var getSubstitution = __webpack_require__("0cb2");
+var regExpExec = __webpack_require__("14c3");
+var wellKnownSymbol = __webpack_require__("b622");
+
+var REPLACE = wellKnownSymbol('replace');
+var max = Math.max;
+var min = Math.min;
+
+var maybeToString = function (it) {
+  return it === undefined ? it : String(it);
+};
+
+// IE <= 11 replaces $0 with the whole match, as if it was $&
+// https://stackoverflow.com/questions/6024666/getting-ie-to-replace-a-regex-with-the-literal-string-0
+var REPLACE_KEEPS_$0 = (function () {
+  // eslint-disable-next-line regexp/prefer-escape-replacement-dollar-char -- required for testing
+  return 'a'.replace(/./, '$0') === '$0';
+})();
+
+// Safari <= 13.0.3(?) substitutes nth capture where n>m with an empty string
+var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = (function () {
+  if (/./[REPLACE]) {
+    return /./[REPLACE]('a', '$0') === '';
+  }
+  return false;
+})();
+
+var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
+  var re = /./;
+  re.exec = function () {
+    var result = [];
+    result.groups = { a: '7' };
+    return result;
+  };
+  // eslint-disable-next-line regexp/no-useless-dollar-replacements -- false positive
+  return ''.replace(re, '$<a>') !== '7';
+});
+
+// @@replace logic
+fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNative) {
+  var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? '$' : '$0';
+
+  return [
+    // `String.prototype.replace` method
+    // https://tc39.es/ecma262/#sec-string.prototype.replace
+    function replace(searchValue, replaceValue) {
+      var O = requireObjectCoercible(this);
+      var replacer = searchValue == undefined ? undefined : searchValue[REPLACE];
+      return replacer !== undefined
+        ? replacer.call(searchValue, O, replaceValue)
+        : nativeReplace.call(toString(O), searchValue, replaceValue);
+    },
+    // `RegExp.prototype[@@replace]` method
+    // https://tc39.es/ecma262/#sec-regexp.prototype-@@replace
+    function (string, replaceValue) {
+      var rx = anObject(this);
+      var S = toString(string);
+
+      if (
+        typeof replaceValue === 'string' &&
+        replaceValue.indexOf(UNSAFE_SUBSTITUTE) === -1 &&
+        replaceValue.indexOf('$<') === -1
+      ) {
+        var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
+        if (res.done) return res.value;
+      }
+
+      var functionalReplace = typeof replaceValue === 'function';
+      if (!functionalReplace) replaceValue = toString(replaceValue);
+
+      var global = rx.global;
+      if (global) {
+        var fullUnicode = rx.unicode;
+        rx.lastIndex = 0;
+      }
+      var results = [];
+      while (true) {
+        var result = regExpExec(rx, S);
+        if (result === null) break;
+
+        results.push(result);
+        if (!global) break;
+
+        var matchStr = toString(result[0]);
+        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+      }
+
+      var accumulatedResult = '';
+      var nextSourcePosition = 0;
+      for (var i = 0; i < results.length; i++) {
+        result = results[i];
+
+        var matched = toString(result[0]);
+        var position = max(min(toInteger(result.index), S.length), 0);
+        var captures = [];
+        // NOTE: This is equivalent to
+        //   captures = result.slice(1).map(maybeToString)
+        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+        for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
+        var namedCaptures = result.groups;
+        if (functionalReplace) {
+          var replacerArgs = [matched].concat(captures, position, S);
+          if (namedCaptures !== undefined) replacerArgs.push(namedCaptures);
+          var replacement = toString(replaceValue.apply(undefined, replacerArgs));
+        } else {
+          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+        }
+        if (position >= nextSourcePosition) {
+          accumulatedResult += S.slice(nextSourcePosition, position) + replacement;
+          nextSourcePosition = position + matched.length;
+        }
+      }
+      return accumulatedResult + S.slice(nextSourcePosition);
+    }
+  ];
+}, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
+
+
+/***/ }),
+
 /***/ "5692":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -414,6 +865,37 @@ var store = __webpack_require__("c6cd");
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
+
+
+/***/ }),
+
+/***/ "56ef":
+/***/ (function(module, exports, __webpack_require__) {
+
+var getBuiltIn = __webpack_require__("d066");
+var getOwnPropertyNamesModule = __webpack_require__("241c");
+var getOwnPropertySymbolsModule = __webpack_require__("7418");
+var anObject = __webpack_require__("825a");
+
+// all object keys, includes non-enumerable and symbols
+module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
+  var keys = getOwnPropertyNamesModule.f(anObject(it));
+  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
+  return getOwnPropertySymbols ? keys.concat(getOwnPropertySymbols(it)) : keys;
+};
+
+
+/***/ }),
+
+/***/ "577e":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isSymbol = __webpack_require__("d9b5");
+
+module.exports = function (argument) {
+  if (isSymbol(argument)) throw TypeError('Cannot convert a Symbol value to a string');
+  return String(argument);
+};
 
 
 /***/ }),
@@ -440,6 +922,41 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ "6547":
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__("a691");
+var toString = __webpack_require__("577e");
+var requireObjectCoercible = __webpack_require__("1d80");
+
+// `String.prototype.codePointAt` methods implementation
+var createMethod = function (CONVERT_TO_STRING) {
+  return function ($this, pos) {
+    var S = toString(requireObjectCoercible($this));
+    var position = toInteger(pos);
+    var size = S.length;
+    var first, second;
+    if (position < 0 || position >= size) return CONVERT_TO_STRING ? '' : undefined;
+    first = S.charCodeAt(position);
+    return first < 0xD800 || first > 0xDBFF || position + 1 === size
+      || (second = S.charCodeAt(position + 1)) < 0xDC00 || second > 0xDFFF
+        ? CONVERT_TO_STRING ? S.charAt(position) : first
+        : CONVERT_TO_STRING ? S.slice(position, position + 2) : (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
+  };
+};
+
+module.exports = {
+  // `String.prototype.codePointAt` method
+  // https://tc39.es/ecma262/#sec-string.prototype.codepointat
+  codeAt: createMethod(false),
+  // `String.prototype.at` method
+  // https://github.com/mathiasbynens/String.prototype.at
+  charAt: createMethod(true)
+};
+
+
+/***/ }),
+
 /***/ "65f0":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -454,6 +971,153 @@ module.exports = function (originalArray, length) {
 
 /***/ }),
 
+/***/ "69f3":
+/***/ (function(module, exports, __webpack_require__) {
+
+var NATIVE_WEAK_MAP = __webpack_require__("7f9a");
+var global = __webpack_require__("da84");
+var isObject = __webpack_require__("861d");
+var createNonEnumerableProperty = __webpack_require__("9112");
+var objectHas = __webpack_require__("5135");
+var shared = __webpack_require__("c6cd");
+var sharedKey = __webpack_require__("f772");
+var hiddenKeys = __webpack_require__("d012");
+
+var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
+var WeakMap = global.WeakMap;
+var set, get, has;
+
+var enforce = function (it) {
+  return has(it) ? get(it) : set(it, {});
+};
+
+var getterFor = function (TYPE) {
+  return function (it) {
+    var state;
+    if (!isObject(it) || (state = get(it)).type !== TYPE) {
+      throw TypeError('Incompatible receiver, ' + TYPE + ' required');
+    } return state;
+  };
+};
+
+if (NATIVE_WEAK_MAP || shared.state) {
+  var store = shared.state || (shared.state = new WeakMap());
+  var wmget = store.get;
+  var wmhas = store.has;
+  var wmset = store.set;
+  set = function (it, metadata) {
+    if (wmhas.call(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    metadata.facade = it;
+    wmset.call(store, it, metadata);
+    return metadata;
+  };
+  get = function (it) {
+    return wmget.call(store, it) || {};
+  };
+  has = function (it) {
+    return wmhas.call(store, it);
+  };
+} else {
+  var STATE = sharedKey('state');
+  hiddenKeys[STATE] = true;
+  set = function (it, metadata) {
+    if (objectHas(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    metadata.facade = it;
+    createNonEnumerableProperty(it, STATE, metadata);
+    return metadata;
+  };
+  get = function (it) {
+    return objectHas(it, STATE) ? it[STATE] : {};
+  };
+  has = function (it) {
+    return objectHas(it, STATE);
+  };
+}
+
+module.exports = {
+  set: set,
+  get: get,
+  has: has,
+  enforce: enforce,
+  getterFor: getterFor
+};
+
+
+/***/ }),
+
+/***/ "6eeb":
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__("da84");
+var createNonEnumerableProperty = __webpack_require__("9112");
+var has = __webpack_require__("5135");
+var setGlobal = __webpack_require__("ce4e");
+var inspectSource = __webpack_require__("8925");
+var InternalStateModule = __webpack_require__("69f3");
+
+var getInternalState = InternalStateModule.get;
+var enforceInternalState = InternalStateModule.enforce;
+var TEMPLATE = String(String).split('String');
+
+(module.exports = function (O, key, value, options) {
+  var unsafe = options ? !!options.unsafe : false;
+  var simple = options ? !!options.enumerable : false;
+  var noTargetGet = options ? !!options.noTargetGet : false;
+  var state;
+  if (typeof value == 'function') {
+    if (typeof key == 'string' && !has(value, 'name')) {
+      createNonEnumerableProperty(value, 'name', key);
+    }
+    state = enforceInternalState(value);
+    if (!state.source) {
+      state.source = TEMPLATE.join(typeof key == 'string' ? key : '');
+    }
+  }
+  if (O === global) {
+    if (simple) O[key] = value;
+    else setGlobal(key, value);
+    return;
+  } else if (!unsafe) {
+    delete O[key];
+  } else if (!noTargetGet && O[key]) {
+    simple = true;
+  }
+  if (simple) O[key] = value;
+  else createNonEnumerableProperty(O, key, value);
+// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+})(Function.prototype, 'toString', function toString() {
+  return typeof this == 'function' && getInternalState(this).source || inspectSource(this);
+});
+
+
+/***/ }),
+
+/***/ "7418":
+/***/ (function(module, exports) {
+
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
+exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+
+/***/ "7839":
+/***/ (function(module, exports) {
+
+// IE8- don't enum bug keys
+module.exports = [
+  'constructor',
+  'hasOwnProperty',
+  'isPrototypeOf',
+  'propertyIsEnumerable',
+  'toLocaleString',
+  'toString',
+  'valueOf'
+];
+
+
+/***/ }),
+
 /***/ "7b0b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -464,6 +1128,108 @@ var requireObjectCoercible = __webpack_require__("1d80");
 module.exports = function (argument) {
   return Object(requireObjectCoercible(argument));
 };
+
+
+/***/ }),
+
+/***/ "7c73":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* global ActiveXObject -- old IE, WSH */
+var anObject = __webpack_require__("825a");
+var defineProperties = __webpack_require__("37e8");
+var enumBugKeys = __webpack_require__("7839");
+var hiddenKeys = __webpack_require__("d012");
+var html = __webpack_require__("1be4");
+var documentCreateElement = __webpack_require__("cc12");
+var sharedKey = __webpack_require__("f772");
+
+var GT = '>';
+var LT = '<';
+var PROTOTYPE = 'prototype';
+var SCRIPT = 'script';
+var IE_PROTO = sharedKey('IE_PROTO');
+
+var EmptyConstructor = function () { /* empty */ };
+
+var scriptTag = function (content) {
+  return LT + SCRIPT + GT + content + LT + '/' + SCRIPT + GT;
+};
+
+// Create object with fake `null` prototype: use ActiveX Object with cleared prototype
+var NullProtoObjectViaActiveX = function (activeXDocument) {
+  activeXDocument.write(scriptTag(''));
+  activeXDocument.close();
+  var temp = activeXDocument.parentWindow.Object;
+  activeXDocument = null; // avoid memory leak
+  return temp;
+};
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var NullProtoObjectViaIFrame = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = documentCreateElement('iframe');
+  var JS = 'java' + SCRIPT + ':';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  html.appendChild(iframe);
+  // https://github.com/zloirock/core-js/issues/475
+  iframe.src = String(JS);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(scriptTag('document.F=Object'));
+  iframeDocument.close();
+  return iframeDocument.F;
+};
+
+// Check for document.domain and active x support
+// No need to use active x approach when document.domain is not set
+// see https://github.com/es-shims/es5-shim/issues/150
+// variation of https://github.com/kitcambridge/es5-shim/commit/4f738ac066346
+// avoid IE GC bug
+var activeXDocument;
+var NullProtoObject = function () {
+  try {
+    activeXDocument = new ActiveXObject('htmlfile');
+  } catch (error) { /* ignore */ }
+  NullProtoObject = typeof document != 'undefined'
+    ? document.domain && activeXDocument
+      ? NullProtoObjectViaActiveX(activeXDocument) // old IE
+      : NullProtoObjectViaIFrame()
+    : NullProtoObjectViaActiveX(activeXDocument); // WSH
+  var length = enumBugKeys.length;
+  while (length--) delete NullProtoObject[PROTOTYPE][enumBugKeys[length]];
+  return NullProtoObject();
+};
+
+hiddenKeys[IE_PROTO] = true;
+
+// `Object.create` method
+// https://tc39.es/ecma262/#sec-object.create
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    EmptyConstructor[PROTOTYPE] = anObject(O);
+    result = new EmptyConstructor();
+    EmptyConstructor[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = NullProtoObject();
+  return Properties === undefined ? result : defineProperties(result, Properties);
+};
+
+
+/***/ }),
+
+/***/ "7f9a":
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__("da84");
+var inspectSource = __webpack_require__("8925");
+
+var WeakMap = global.WeakMap;
+
+module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
 
 
 /***/ }),
@@ -598,6 +1364,48 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "8925":
+/***/ (function(module, exports, __webpack_require__) {
+
+var store = __webpack_require__("c6cd");
+
+var functionToString = Function.toString;
+
+// this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
+if (typeof store.inspectSource != 'function') {
+  store.inspectSource = function (it) {
+    return functionToString.call(it);
+  };
+}
+
+module.exports = store.inspectSource;
+
+
+/***/ }),
+
+/***/ "8aa5":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var charAt = __webpack_require__("6547").charAt;
+
+// `AdvanceStringIndex` abstract operation
+// https://tc39.es/ecma262/#sec-advancestringindex
+module.exports = function (S, index, unicode) {
+  return index + (unicode ? charAt(S, index).length : 1);
+};
+
+
+/***/ }),
+
+/***/ "8c5f":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "90e3":
 /***/ (function(module, exports) {
 
@@ -628,6 +1436,155 @@ module.exports = DESCRIPTORS ? function (object, key, value) {
 
 /***/ }),
 
+/***/ "9263":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/* eslint-disable regexp/no-empty-capturing-group, regexp/no-empty-group, regexp/no-lazy-ends -- testing */
+/* eslint-disable regexp/no-useless-quantifier -- testing */
+var toString = __webpack_require__("577e");
+var regexpFlags = __webpack_require__("ad6d");
+var stickyHelpers = __webpack_require__("9f7f");
+var shared = __webpack_require__("5692");
+var create = __webpack_require__("7c73");
+var getInternalState = __webpack_require__("69f3").get;
+var UNSUPPORTED_DOT_ALL = __webpack_require__("fce3");
+var UNSUPPORTED_NCG = __webpack_require__("107c");
+
+var nativeExec = RegExp.prototype.exec;
+var nativeReplace = shared('native-string-replace', String.prototype.replace);
+
+var patchedExec = nativeExec;
+
+var UPDATES_LAST_INDEX_WRONG = (function () {
+  var re1 = /a/;
+  var re2 = /b*/g;
+  nativeExec.call(re1, 'a');
+  nativeExec.call(re2, 'a');
+  return re1.lastIndex !== 0 || re2.lastIndex !== 0;
+})();
+
+var UNSUPPORTED_Y = stickyHelpers.UNSUPPORTED_Y || stickyHelpers.BROKEN_CARET;
+
+// nonparticipating capturing group, copied from es5-shim's String#split patch.
+var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
+
+var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
+
+if (PATCH) {
+  // eslint-disable-next-line max-statements -- TODO
+  patchedExec = function exec(string) {
+    var re = this;
+    var state = getInternalState(re);
+    var str = toString(string);
+    var raw = state.raw;
+    var result, reCopy, lastIndex, match, i, object, group;
+
+    if (raw) {
+      raw.lastIndex = re.lastIndex;
+      result = patchedExec.call(raw, str);
+      re.lastIndex = raw.lastIndex;
+      return result;
+    }
+
+    var groups = state.groups;
+    var sticky = UNSUPPORTED_Y && re.sticky;
+    var flags = regexpFlags.call(re);
+    var source = re.source;
+    var charsAdded = 0;
+    var strCopy = str;
+
+    if (sticky) {
+      flags = flags.replace('y', '');
+      if (flags.indexOf('g') === -1) {
+        flags += 'g';
+      }
+
+      strCopy = str.slice(re.lastIndex);
+      // Support anchored sticky behavior.
+      if (re.lastIndex > 0 && (!re.multiline || re.multiline && str.charAt(re.lastIndex - 1) !== '\n')) {
+        source = '(?: ' + source + ')';
+        strCopy = ' ' + strCopy;
+        charsAdded++;
+      }
+      // ^(? + rx + ) is needed, in combination with some str slicing, to
+      // simulate the 'y' flag.
+      reCopy = new RegExp('^(?:' + source + ')', flags);
+    }
+
+    if (NPCG_INCLUDED) {
+      reCopy = new RegExp('^' + source + '$(?!\\s)', flags);
+    }
+    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
+
+    match = nativeExec.call(sticky ? reCopy : re, strCopy);
+
+    if (sticky) {
+      if (match) {
+        match.input = match.input.slice(charsAdded);
+        match[0] = match[0].slice(charsAdded);
+        match.index = re.lastIndex;
+        re.lastIndex += match[0].length;
+      } else re.lastIndex = 0;
+    } else if (UPDATES_LAST_INDEX_WRONG && match) {
+      re.lastIndex = re.global ? match.index + match[0].length : lastIndex;
+    }
+    if (NPCG_INCLUDED && match && match.length > 1) {
+      // Fix browsers whose `exec` methods don't consistently return `undefined`
+      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+      nativeReplace.call(match[0], reCopy, function () {
+        for (i = 1; i < arguments.length - 2; i++) {
+          if (arguments[i] === undefined) match[i] = undefined;
+        }
+      });
+    }
+
+    if (match && groups) {
+      match.groups = object = create(null);
+      for (i = 0; i < groups.length; i++) {
+        group = groups[i];
+        object[group[0]] = match[group[1]];
+      }
+    }
+
+    return match;
+  };
+}
+
+module.exports = patchedExec;
+
+
+/***/ }),
+
+/***/ "94ca":
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__("d039");
+
+var replacement = /#|\.prototype\./;
+
+var isForced = function (feature, detection) {
+  var value = data[normalize(feature)];
+  return value == POLYFILL ? true
+    : value == NATIVE ? false
+    : typeof detection == 'function' ? fails(detection)
+    : !!detection;
+};
+
+var normalize = isForced.normalize = function (string) {
+  return String(string).replace(replacement, '.').toLowerCase();
+};
+
+var data = isForced.data = {};
+var NATIVE = isForced.NATIVE = 'N';
+var POLYFILL = isForced.POLYFILL = 'P';
+
+module.exports = isForced;
+
+
+/***/ }),
+
 /***/ "9bf2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -652,6 +1609,38 @@ exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attrib
   if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
+
+
+/***/ }),
+
+/***/ "9c67":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "9f7f":
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__("d039");
+var global = __webpack_require__("da84");
+
+// babel-minify and Closure Compiler transpiles RegExp('a', 'y') -> /a/y and it causes SyntaxError
+var $RegExp = global.RegExp;
+
+exports.UNSUPPORTED_Y = fails(function () {
+  var re = $RegExp('a', 'y');
+  re.lastIndex = 2;
+  return re.exec('abcd') != null;
+});
+
+exports.BROKEN_CARET = fails(function () {
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=773687
+  var re = $RegExp('^r', 'gy');
+  re.lastIndex = 2;
+  return re.exec('str') != null;
+});
 
 
 /***/ }),
@@ -720,6 +1709,47 @@ module.exports = function (argument) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "ac1f":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var exec = __webpack_require__("9263");
+
+// `RegExp.prototype.exec` method
+// https://tc39.es/ecma262/#sec-regexp.prototype.exec
+$({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
+  exec: exec
+});
+
+
+/***/ }),
+
+/***/ "ad6d":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var anObject = __webpack_require__("825a");
+
+// `RegExp.prototype.flags` getter implementation
+// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
+module.exports = function () {
+  var that = anObject(this);
+  var result = '';
+  if (that.global) result += 'g';
+  if (that.ignoreCase) result += 'i';
+  if (that.multiline) result += 'm';
+  if (that.dotAll) result += 's';
+  if (that.unicode) result += 'u';
+  if (that.sticky) result += 'y';
+  return result;
+};
+
 
 /***/ }),
 
@@ -930,6 +1960,30 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "ca84":
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__("5135");
+var toIndexedObject = __webpack_require__("fc6a");
+var indexOf = __webpack_require__("4d64").indexOf;
+var hiddenKeys = __webpack_require__("d012");
+
+module.exports = function (object, names) {
+  var O = toIndexedObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) !has(hiddenKeys, key) && has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~indexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+
 /***/ "cc12":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -964,6 +2018,14 @@ module.exports = function (key, value) {
 
 /***/ }),
 
+/***/ "d012":
+/***/ (function(module, exports) {
+
+module.exports = {};
+
+
+/***/ }),
+
 /***/ "d039":
 /***/ (function(module, exports) {
 
@@ -994,6 +2056,28 @@ module.exports = function (namespace, method) {
 
 /***/ }),
 
+/***/ "d1e7":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+
+// Nashorn ~ JDK8 bug
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
+
+// `Object.prototype.propertyIsEnumerable` method implementation
+// https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
+exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
+  var descriptor = getOwnPropertyDescriptor(this, V);
+  return !!descriptor && descriptor.enumerable;
+} : $propertyIsEnumerable;
+
+
+/***/ }),
+
 /***/ "d415":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1014,6 +2098,97 @@ module.exports = function (namespace, method) {
 
 /***/ }),
 
+/***/ "d784":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// TODO: Remove from `core-js@4` since it's moved to entry points
+__webpack_require__("ac1f");
+var redefine = __webpack_require__("6eeb");
+var regexpExec = __webpack_require__("9263");
+var fails = __webpack_require__("d039");
+var wellKnownSymbol = __webpack_require__("b622");
+var createNonEnumerableProperty = __webpack_require__("9112");
+
+var SPECIES = wellKnownSymbol('species');
+var RegExpPrototype = RegExp.prototype;
+
+module.exports = function (KEY, exec, FORCED, SHAM) {
+  var SYMBOL = wellKnownSymbol(KEY);
+
+  var DELEGATES_TO_SYMBOL = !fails(function () {
+    // String methods call symbol-named RegEp methods
+    var O = {};
+    O[SYMBOL] = function () { return 7; };
+    return ''[KEY](O) != 7;
+  });
+
+  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails(function () {
+    // Symbol-named RegExp methods call .exec
+    var execCalled = false;
+    var re = /a/;
+
+    if (KEY === 'split') {
+      // We can't use real regex here since it causes deoptimization
+      // and serious performance degradation in V8
+      // https://github.com/zloirock/core-js/issues/306
+      re = {};
+      // RegExp[@@split] doesn't call the regex's exec method, but first creates
+      // a new one. We need to return the patched regex when creating the new one.
+      re.constructor = {};
+      re.constructor[SPECIES] = function () { return re; };
+      re.flags = '';
+      re[SYMBOL] = /./[SYMBOL];
+    }
+
+    re.exec = function () { execCalled = true; return null; };
+
+    re[SYMBOL]('');
+    return !execCalled;
+  });
+
+  if (
+    !DELEGATES_TO_SYMBOL ||
+    !DELEGATES_TO_EXEC ||
+    FORCED
+  ) {
+    var nativeRegExpMethod = /./[SYMBOL];
+    var methods = exec(SYMBOL, ''[KEY], function (nativeMethod, regexp, str, arg2, forceStringMethod) {
+      var $exec = regexp.exec;
+      if ($exec === regexpExec || $exec === RegExpPrototype.exec) {
+        if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+          // The native String method already delegates to @@method (this
+          // polyfilled function), leasing to infinite recursion.
+          // We avoid it by directly calling the native @@method method.
+          return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
+        }
+        return { done: true, value: nativeMethod.call(str, regexp, arg2) };
+      }
+      return { done: false };
+    });
+
+    redefine(String.prototype, KEY, methods[0]);
+    redefine(RegExpPrototype, SYMBOL, methods[1]);
+  }
+
+  if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], 'sham', true);
+};
+
+
+/***/ }),
+
+/***/ "d8d1":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaScrollUp_vue_vue_type_style_index_0_id_0111c2dd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8c5f");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaScrollUp_vue_vue_type_style_index_0_id_0111c2dd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaScrollUp_vue_vue_type_style_index_0_id_0111c2dd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "d9b5":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1027,6 +2202,13 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
   return typeof $Symbol == 'function' && Object(it) instanceof $Symbol;
 };
 
+
+/***/ }),
+
+/***/ "d9e1":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -1052,6 +2234,40 @@ module.exports =
 
 /***/ }),
 
+/***/ "dea2":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "df75":
+/***/ (function(module, exports, __webpack_require__) {
+
+var internalObjectKeys = __webpack_require__("ca84");
+var enumBugKeys = __webpack_require__("7839");
+
+// `Object.keys` method
+// https://tc39.es/ecma262/#sec-object.keys
+// eslint-disable-next-line es/no-object-keys -- safe
+module.exports = Object.keys || function keys(O) {
+  return internalObjectKeys(O, enumBugKeys);
+};
+
+
+/***/ }),
+
+/***/ "e56e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaNavbar_vue_vue_type_style_index_0_id_413d7f36_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d9e1");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaNavbar_vue_vue_type_style_index_0_id_413d7f36_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiMambaNavbar_vue_vue_type_style_index_0_id_413d7f36_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "e647":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1059,6 +2275,27 @@ module.exports =
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaPortfolio_vue_vue_type_style_index_1_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6045");
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaPortfolio_vue_vue_type_style_index_1_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FuiAlexaPortfolio_vue_vue_type_style_index_1_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
+
+
+/***/ }),
+
+/***/ "e893":
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__("5135");
+var ownKeys = __webpack_require__("56ef");
+var getOwnPropertyDescriptorModule = __webpack_require__("06cf");
+var definePropertyModule = __webpack_require__("9bf2");
+
+module.exports = function (target, source) {
+  var keys = ownKeys(source);
+  var defineProperty = definePropertyModule.f;
+  var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    if (!has(target, key)) defineProperty(target, key, getOwnPropertyDescriptor(source, key));
+  }
+};
 
 
 /***/ }),
@@ -1078,6 +2315,21 @@ module.exports = Array.isArray || function isArray(arg) {
 
 /***/ }),
 
+/***/ "f772":
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__("5692");
+var uid = __webpack_require__("90e3");
+
+var keys = shared('keys');
+
+module.exports = function (key) {
+  return keys[key] || (keys[key] = uid(key));
+};
+
+
+/***/ }),
+
 /***/ "fae3":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1086,8 +2338,6 @@ module.exports = Array.isArray || function isArray(arg) {
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "FuiAlexaTheme", function() { return /* reexport */ FuiAlexaTheme; });
-__webpack_require__.d(__webpack_exports__, "FuiAlexaScrollbarTheme", function() { return /* reexport */ FuiAlexaScrollbarTheme; });
 __webpack_require__.d(__webpack_exports__, "FuiAlexaFooter", function() { return /* reexport */ FuiAlexaFooter; });
 __webpack_require__.d(__webpack_exports__, "FuiAlexaContact", function() { return /* reexport */ FuiAlexaContact; });
 __webpack_require__.d(__webpack_exports__, "FuiAlexaTestimonial", function() { return /* reexport */ FuiAlexaTestimonial; });
@@ -1100,6 +2350,21 @@ __webpack_require__.d(__webpack_exports__, "FuiAlexaAbout", function() { return 
 __webpack_require__.d(__webpack_exports__, "FuiAlexaHome", function() { return /* reexport */ FuiAlexaHome; });
 __webpack_require__.d(__webpack_exports__, "FuiAlexaNavbar", function() { return /* reexport */ FuiAlexaNavbar; });
 __webpack_require__.d(__webpack_exports__, "FuiAlexaApp", function() { return /* reexport */ FuiAlexaApp; });
+__webpack_require__.d(__webpack_exports__, "FuiAlexaScrollbarTheme", function() { return /* reexport */ FuiAlexaScrollbarTheme; });
+__webpack_require__.d(__webpack_exports__, "FuiAlexaTheme", function() { return /* reexport */ FuiAlexaTheme; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaTheme", function() { return /* reexport */ FuiMambaTheme; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaScrollbarTheme", function() { return /* reexport */ FuiMambaScrollReveal; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaScrollReveal", function() { return /* reexport */ FuiMambaScrollReveal; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaScrollUp", function() { return /* reexport */ FuiMambaScrollUp; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaFooter", function() { return /* reexport */ FuiMambaFooter; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaProducts", function() { return /* reexport */ FuiMambaProducts; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaDiscount", function() { return /* reexport */ FuiMambaDiscount; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaCase", function() { return /* reexport */ FuiMambaCase; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaSpecs", function() { return /* reexport */ FuiMambaSpecs; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaSponsor", function() { return /* reexport */ FuiMambaSponsor; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaHome", function() { return /* reexport */ FuiMambaHome; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaNavbar", function() { return /* reexport */ FuiMambaNavbar; });
+__webpack_require__.d(__webpack_exports__, "FuiMambaApp", function() { return /* reexport */ FuiMambaApp; });
 
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 // This file is imported into lib/wc client bundles.
@@ -1125,7 +2390,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaTheme.vue?vue&type=template&id=c5b6e1de&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaTheme.vue?vue&type=template&id=c5b6e1de&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c("div")}
 var staticRenderFns = []
 
@@ -1269,7 +2534,7 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaTheme = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaScrollbarTheme.vue?vue&type=template&id=7cf51eba&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaScrollbarTheme.vue?vue&type=template&id=7cf51eba&
 var FuiAlexaScrollbarThemevue_type_template_id_7cf51eba_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c("div")}
 var FuiAlexaScrollbarThemevue_type_template_id_7cf51eba_staticRenderFns = []
 
@@ -1313,7 +2578,7 @@ var FuiAlexaScrollbarTheme_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaScrollbarTheme = (FuiAlexaScrollbarTheme_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaFooter.vue?vue&type=template&id=6372950a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaFooter.vue?vue&type=template&id=6372950a&
 var FuiAlexaFootervue_type_template_id_6372950a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('footer',{staticClass:"footer fui__alexa",attrs:{"id":"footer"}},[_c('div',{staticClass:"footer__bg"},[_c('div',{staticClass:"footer__container container grid"},[_c('div',[_c('h1',{staticClass:"footer__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"footer__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2)]),_c('ul',{staticClass:"footer__links"},_vm._l((_vm.links),function(item,idx){return _c('li',{key:item.title},[_c('a',{staticClass:"footer__link",attrs:{"href":"#services"},domProps:{"innerHTML":_vm._s(item.title)}})])}),0),_c('div',{staticClass:"footer__socials"},_vm._l((_vm.socials),function(social){return _c('a',{staticClass:"footer__social",attrs:{"href":social.url,"target":"_blank"}},[_c('i',{staticClass:"uil",class:social.icon})])}),0)]),_c('p',{staticClass:"footer__copy",domProps:{"innerHTML":_vm._s(_vm.copy)}})])])}
 var FuiAlexaFootervue_type_template_id_6372950a_staticRenderFns = []
 
@@ -1428,7 +2693,7 @@ var FuiAlexaFooter_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaFooter = (FuiAlexaFooter_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaContact.vue?vue&type=template&id=10121e01&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaContact.vue?vue&type=template&id=10121e01&
 var FuiAlexaContactvue_type_template_id_10121e01_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"contact section fui__alexa",attrs:{"id":"contactMe"}},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"contact__container container grid"},[_c('div',[_c('div',{staticClass:"contact__information"},[_c('i',{staticClass:"uil uil-phone contact__icon"}),_c('div',[_c('h3',{staticClass:"contact__title"},[_vm._v("Call Me")]),_c('span',{staticClass:"contact__subtitle"},[_vm._t("contact",function(){return [_vm._v(_vm._s(_vm.contact))]})],2)])]),_c('div',{staticClass:"contact__information"},[_c('i',{staticClass:"uil uil-envelope contact__icon"}),_c('div',[_c('h3',{staticClass:"contact__title"},[_vm._v("Email")]),_c('span',{staticClass:"contact__subtitle"},[_vm._t("email",function(){return [_vm._v(_vm._s(_vm.email))]})],2)])]),_c('div',{staticClass:"contact__information"},[_c('i',{staticClass:"uil uil-map-marker contact__icon"}),_c('div',[_c('h3',{staticClass:"contact__title"},[_vm._v("Location")]),_c('span',{staticClass:"contact__subtitle"},[_vm._t("location",function(){return [_vm._v(_vm._s(_vm.location))]})],2)])])]),_c('form',{staticClass:"contact__form grid",attrs:{"action":'https://formsubmit.co/'+_vm.email,"method":"POST"}},[_vm._m(0),_vm._m(1),_vm._m(2),_vm._m(3)])])])}
 var FuiAlexaContactvue_type_template_id_10121e01_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"contact__inputs grid"},[_c('div',{staticClass:"contact__content"},[_c('label',{staticClass:"contact__label",attrs:{"for":""}},[_vm._v("Name")]),_c('input',{staticClass:"contact__input",attrs:{"name":"name","type":"text","required":""}})]),_c('div',{staticClass:"contact__content"},[_c('label',{staticClass:"contact__label",attrs:{"for":""}},[_vm._v("Email")]),_c('input',{staticClass:"contact__input",attrs:{"name":"email","type":"email","required":""}})])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"contact__content"},[_c('label',{staticClass:"contact__label",attrs:{"for":""}},[_vm._v("Project")]),_c('input',{staticClass:"contact__input",attrs:{"name":"project","type":"text","required":""}})])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"contact__content"},[_c('label',{staticClass:"contact__label",attrs:{"for":""}},[_vm._v("Message")]),_c('textarea',{staticClass:"contact__input",attrs:{"name":"message","id":"","cols":"0","rows":"7","required":""}})])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('button',{staticClass:"button button--flex",staticStyle:{"outline":"none","border-width":"0","cursor":"pointer","font-weight":"500","font-family":"'Poppins',serif"}},[_vm._v(" Send Message "),_c('i',{staticClass:"uil uil-message button__icon"})])])}]
 
@@ -1543,7 +2808,7 @@ var FuiAlexaContact_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaContact = (FuiAlexaContact_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaTestimonial.vue?vue&type=template&id=d0ae7dda&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaTestimonial.vue?vue&type=template&id=d0ae7dda&scoped=true&
 var FuiAlexaTestimonialvue_type_template_id_d0ae7dda_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"testimonial section fui__alexa"},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"testimonial__container container swiper-container swiper"},[_c('div',{staticClass:"swiper-wrapper"},_vm._l((_vm.items),function(item){return _c('div',{staticClass:"swiper-slide testimonial__content"},[_c('div',{staticClass:"testimonial__data"},[_c('div',{staticClass:"testimonial__header"},[_c('img',{staticClass:"testimonial__img",attrs:{"src":item.imgSrc,"alt":"testimonial_img"}}),_c('div',[_c('h3',{staticClass:"testimonial__name",domProps:{"innerHTML":_vm._s(item.name)}}),_c('span',{staticClass:"testimonial__client",domProps:{"innerHTML":_vm._s(item.type)}})])]),_c('div',_vm._l((item.ratings),function(i){return _c('i',{staticClass:"uil uil-star testimonial__icon-star"})}),0)]),_c('p',{staticClass:"testimonial__description",domProps:{"innerHTML":_vm._s(item.description)}})])}),0),_c('div',{staticClass:"swiper-pagination swiper-pagination-testimonial"})])])}
 var FuiAlexaTestimonialvue_type_template_id_d0ae7dda_scoped_true_staticRenderFns = []
 
@@ -1664,7 +2929,7 @@ var FuiAlexaTestimonial_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaTestimonial = (FuiAlexaTestimonial_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaProject.vue?vue&type=template&id=2236d27c&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaProject.vue?vue&type=template&id=2236d27c&
 var FuiAlexaProjectvue_type_template_id_2236d27c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"project section fui__alexa"},[_c('div',{staticClass:"project__bg"},[_c('div',{staticClass:"project__container container grid"},[_c('div',{staticClass:"project__data"},[_c('h2',{staticClass:"project__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('p',{staticClass:"project__description"},[_vm._t("description",function(){return [_vm._v(_vm._s(_vm.description))]})],2),_c('a',{staticClass:"button button--flex button--white project__button",attrs:{"href":_vm.contactUrl}},[_vm._v(" Contact Me "),_c('i',{staticClass:"uil uil-message project__icon button__icon"})])]),_c('img',{staticClass:"project__img",attrs:{"src":_vm.imgSrc,"alt":"contact_img"}})])])])}
 var FuiAlexaProjectvue_type_template_id_2236d27c_staticRenderFns = []
 
@@ -1735,7 +3000,7 @@ var FuiAlexaProject_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaProject = (FuiAlexaProject_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaPortfolio.vue?vue&type=template&id=2c41cba0&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaPortfolio.vue?vue&type=template&id=2c41cba0&scoped=true&
 var FuiAlexaPortfoliovue_type_template_id_2c41cba0_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"portfolio section fui__alexa",attrs:{"id":"portfolio"}},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"portfolio__container container swiper swiper-container"},[_c('div',{staticClass:"swiper-wrapper"},_vm._l((_vm.items),function(item){return _c('div',{staticClass:"portfolio__content grid swiper-slide"},[_c('img',{staticClass:"portfolio__img",attrs:{"src":item.imageUrl,"alt":"portfolio_image"}}),_c('div',{staticClass:"portfolio__data"},[_c('h3',{staticClass:"portfolio__title",domProps:{"innerHTML":_vm._s(item.title)}}),_c('p',{staticClass:"portfolio__description",domProps:{"innerHTML":_vm._s(item.description)}}),_c('a',{staticClass:"button button--flex button--small portfolio__button",attrs:{"href":item.demoUrl}},[_vm._v(" Demo "),_c('i',{staticClass:"uil uil-arrow-right button__icon"})])])])}),0),_vm._m(0),_vm._m(1),_c('div',{staticClass:"swiper-pagination"})])])}
 var FuiAlexaPortfoliovue_type_template_id_2c41cba0_scoped_true_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"swiper-button-next"},[_c('i',{staticClass:"uil uil-angle-right-b swiper-portfolio-icon"})])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"swiper-button-prev"},[_c('i',{staticClass:"uil uil-angle-left-b swiper-portfolio-icon"})])}]
 
@@ -1859,7 +3124,7 @@ var FuiAlexaPortfolio_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaPortfolio = (FuiAlexaPortfolio_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaServices.vue?vue&type=template&id=bc29c2a6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaServices.vue?vue&type=template&id=bc29c2a6&
 var FuiAlexaServicesvue_type_template_id_bc29c2a6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"services section fui__alexa",attrs:{"id":"services"}},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"services__container container grid"},_vm._l((_vm.items),function(item,idx){return _c('div',{staticClass:"services__content"},[_c('div',[_c('i',{staticClass:"uil services__icon",class:item.icon}),_c('h3',{staticClass:"services__title",domProps:{"innerHTML":_vm._s(item.title)}})]),(item.items && item.items.length > 0)?_c('span',{staticClass:"button button--flex button--small button--link services__button",on:{"click":function($event){_vm.target = idx}}},[_vm._v(" View More "),_c('i',{staticClass:"uil uil-arrow-right button__icon"})]):_vm._e(),_c('div',{staticClass:"services__modal",class:{'active-modal' : _vm.target === idx}},[_c('div',{staticClass:"services__modal-content"},[_c('h4',{staticClass:"services__modal-title",domProps:{"innerHTML":_vm._s(item.title)}}),_c('i',{staticClass:"uil uil-times services__modal-close",on:{"click":function($event){_vm.target = ''}}}),_c('ul',{staticClass:"services__modal-services grid"},_vm._l((item.items),function(set){return _c('li',{staticClass:"services__modal-service"},[_c('i',{staticClass:"uil uil-check-circle services__modal-icon"}),_c('p',{domProps:{"innerHTML":_vm._s(set)}})])}),0)])])])}),0)])}
 var FuiAlexaServicesvue_type_template_id_bc29c2a6_staticRenderFns = []
 
@@ -1969,7 +3234,7 @@ var FuiAlexaServices_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaServices = (FuiAlexaServices_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaQualification.vue?vue&type=template&id=dd30101e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaQualification.vue?vue&type=template&id=dd30101e&
 var FuiAlexaQualificationvue_type_template_id_dd30101e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"qualification section fui__alexa"},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"qualification__container container"},[_c('div',{staticClass:"qualification__tabs"},_vm._l((_vm.items),function(item,idx){return _c('div',{staticClass:"qualification__button button--flex",class:{ 'qualification__active':_vm.target === idx},on:{"click":function($event){_vm.target = idx}}},[_c('i',{staticClass:"uil uil-graduation-cap qualification__icon"}),_vm._v(" "+_vm._s(item.title)+" ")])}),0),_c('div',{staticClass:"qualification__sections"},_vm._l((_vm.items),function(item,idx){return _c('div',{staticClass:"qualification__content",class:{ 'qualification__active':_vm.target === idx},attrs:{"data-content":"","id":idx,"data-target":""}},_vm._l((item.sets),function(set,setIdx){return _c('div',{staticClass:"qualification__data"},[(setIdx % 2 === 1)?_c('div'):_vm._e(),(setIdx % 2 === 1)?_c('div',[_c('span',{staticClass:"qualification__rounder"}),(setIdx !== item.sets.length-1)?_c('span',{staticClass:"qualification__line"}):_vm._e()]):_vm._e(),_c('div',[_c('h3',{staticClass:"qualification__title",domProps:{"innerHTML":_vm._s(set.title)}}),_c('span',{staticClass:"qualification__subtitle",domProps:{"innerHTML":_vm._s(set.subtitle)}}),_c('div',{staticClass:"qualification__calendar"},[_c('i',{staticClass:"uil uil-calendar-alt"}),_vm._v(" "+_vm._s(set.date)+" ")])]),(setIdx % 2 === 0)?_c('div',[_c('span',{staticClass:"qualification__rounder"}),(setIdx !== item.sets.length-1)?_c('span',{staticClass:"qualification__line"}):_vm._e()]):_vm._e()])}),0)}),0)])])}
 var FuiAlexaQualificationvue_type_template_id_dd30101e_staticRenderFns = []
 
@@ -2117,7 +3382,7 @@ var FuiAlexaQualification_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaQualification = (FuiAlexaQualification_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaSkills.vue?vue&type=template&id=e0739936&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaSkills.vue?vue&type=template&id=e0739936&
 var FuiAlexaSkillsvue_type_template_id_e0739936_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"skill section fui__alexa",attrs:{"id":"skills"}},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"skills__container container grid"},_vm._l((_vm.skills),function(skill,idx){return _c('div',{key:skill.title,staticClass:"skills__content",class:{ skills__open: _vm.selectedSkill === idx }},[_c('div',{staticClass:"skills__header",on:{"click":function($event){return _vm.handleToggle(idx)}}},[_c('i',{staticClass:"uil skills__icon",class:skill.prefixIcon}),_c('div',[_c('h1',{staticClass:"skills__titles"},[_vm._v(_vm._s(skill.title))]),_c('span',{staticClass:"skills__subtitle"},[_vm._v(_vm._s(skill.subTitle))])]),_c('i',{staticClass:"uil uil-angle-down skills__arrow"})]),_c('div',{staticClass:"skills__list grid"},_vm._l((skill.sets),function(set,idx){return _c('div',{key:skill.title + idx,staticClass:"skills__data"},[_c('div',{staticClass:"skills__titles"},[_c('h3',{staticClass:"skills__name"},[_vm._v(_vm._s(set.title))]),_c('span',{staticClass:"skills__number"},[_vm._v(_vm._s(set.percentage))])]),_c('div',{staticClass:"skills__bar"},[_c('span',{staticClass:"skills__percentage",style:({ width: set.percentage })})])])}),0)])}),0)])}
 var FuiAlexaSkillsvue_type_template_id_e0739936_staticRenderFns = []
 
@@ -2277,7 +3542,7 @@ var FuiAlexaSkills_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaSkills = (FuiAlexaSkills_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaAbout.vue?vue&type=template&id=ae69867c&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaAbout.vue?vue&type=template&id=ae69867c&
 var FuiAlexaAboutvue_type_template_id_ae69867c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"about section fui__alexa",attrs:{"id":"about"}},[_c('h2',{staticClass:"section__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('span',{staticClass:"section__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('div',{staticClass:"about__container container grid"},[_vm._t("image",function(){return [_c('img',{staticClass:"about__img",attrs:{"src":_vm.imgSrc,"alt":""}})]}),_c('div',{staticClass:"about__data"},[_c('p',{staticClass:"about__description"},[_vm._t("description",function(){return [_vm._v(_vm._s(_vm.description))]})],2),_c('div',{staticClass:"about__info"},[_vm._t("abouts",function(){return _vm._l((_vm.abouts),function(about,idx){return _c('div',{key:idx},[_c('span',{staticClass:"about__info-title"},[_vm._v(_vm._s(about.title))]),_c('span',{staticClass:"about__info-name",domProps:{"innerHTML":_vm._s(about.subTitle)}})])})})],2),(_vm.downloadUrl)?_c('div',{staticClass:"about__buttons"},[_c('a',{staticClass:"button button-flex",attrs:{"href":_vm.downloadUrl}},[_vm._t("buttonText",function(){return [_vm._v("Download CV ")]}),_vm._t("buttonIcon",function(){return [_c('i',{staticClass:"uil uil-download-alt button__icon"})]})],2)]):_vm._e()])],2)])}
 var FuiAlexaAboutvue_type_template_id_ae69867c_staticRenderFns = []
 
@@ -2384,7 +3649,7 @@ var FuiAlexaAbout_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaAbout = (FuiAlexaAbout_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaHome.vue?vue&type=template&id=342c829f&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaHome.vue?vue&type=template&id=342c829f&scoped=true&
 var FuiAlexaHomevue_type_template_id_342c829f_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"home section fui__alexa",attrs:{"id":"home"}},[_c('div',{staticClass:"home__container container grid"},[_c('div',{staticClass:"home__content grid"},[_c('div',{staticClass:"home__social"},_vm._l((_vm.socials),function(social,idx){return _c('a',{key:idx,staticClass:"home__social-icon",attrs:{"target":"_blank","href":social.url}},[_c('i',{class:social.icon})])}),0),_c('div',{staticClass:"home__img"},[_c('svg',{staticClass:"home__blob",attrs:{"viewBox":"0 0 200 187","xmlns":"http://www.w3.org/2000/svg","xmlns:xlink":"http://www.w3.org/1999/xlink"}},[_c('mask',{attrs:{"id":"mask0","mask-type":"alpha"}},[_c('path',{attrs:{"d":"M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 165.547\n      130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 129.362C2.45775 \n      97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 -0.149132 97.9666 \n      0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"}})]),_c('g',{attrs:{"mask":"url(#mask0)"}},[_c('path',{attrs:{"d":"M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346\n      165.547 130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 \n      129.362C2.45775 97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 \n      -0.149132 97.9666 0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"}}),_vm._t("image",function(){return [_c('image',{staticClass:"home__blob-img",attrs:{"x":"12","y":"18","href":_vm.imgUrl}})]})],2)])]),_c('div',{staticClass:"home__data"},[_c('h1',{staticClass:"home__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('h3',{staticClass:"home__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subTitle))]})],2),_c('p',{staticClass:"home__description"},[_vm._t("description",function(){return [_vm._v(_vm._s(_vm.description))]})],2),(_vm.redirectTo)?_c('a',{staticClass:"button button--flex",attrs:{"href":_vm.redirectTo}},[_vm._t("buttonText",function(){return [_vm._v("Contact Me")]}),_vm._t("buttonIcon",function(){return [_c('i',{staticClass:"uil uil-message button__icon"})]})],2):_vm._e()])]),(_vm.scrollTo)?_c('div',{staticClass:"home__scroll"},[_c('a',{staticClass:"home__scroll-button button--flex",attrs:{"href":_vm.scrollTo}},[_c('i',{staticClass:"uil uil-mouse-alt home__scroll-mouse"}),_c('span',{staticClass:"home__scroll-name"},[_vm._v("Scroll down")]),_c('i',{staticClass:"uil uil-arrow-down home__scroll-arrow"})])]):_vm._e()])])}
 var FuiAlexaHomevue_type_template_id_342c829f_scoped_true_staticRenderFns = []
 
@@ -2531,7 +3796,7 @@ var FuiAlexaHome_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaHome = (FuiAlexaHome_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaNavbar.vue?vue&type=template&id=0afd9b7a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaNavbar.vue?vue&type=template&id=0afd9b7a&
 var FuiAlexaNavbarvue_type_template_id_0afd9b7a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('header',{staticClass:"header fui__alexa",staticStyle:{"margin-bottom":"0"},attrs:{"id":"header"}},[_c('nav',{staticClass:"nav container"},[_c('a',{staticClass:"nav__logo",attrs:{"href":"#"}},[_vm._t("title",function(){return [_vm._v(" "+_vm._s(_vm.title))]})],2),_c('div',{staticClass:"nav__menu",class:{ 'show-menu': _vm.showMenu },attrs:{"id":"nav-menu"}},[_vm._t("navItems",function(){return [_c('ul',{staticClass:"nav__list grid"},_vm._l((_vm.items),function(item,idx){return (idx < 7)?_c('li',{key:item.title,staticClass:"nav__item"},[_c('a',{staticClass:"nav__link",class:{'active-link' : item.isActive},attrs:{"href":item.route},on:{"click":function($event){_vm.showMenu = false}}},[_c('i',{staticClass:"uil nav__icon",class:item.icon}),_vm._v(" "+_vm._s(item.title)+" ")])]):_vm._e()}),0)]}),_c('i',{staticClass:"uil uil-times nav__close",attrs:{"id":"nav-close"},on:{"click":_vm.handleToggle}})],2),_c('div',{staticClass:"nav__btns"},[_c('i',{staticClass:"uil uil-moon change-theme",attrs:{"id":"theme-button"},on:{"click":_vm.themeButtonHandler}}),_c('div',{staticClass:"nav__toggle",attrs:{"id":"nav-toggle"}},[_c('i',{staticClass:"uil uil-apps",on:{"click":_vm.handleToggle}})])])])])}
 var FuiAlexaNavbarvue_type_template_id_0afd9b7a_staticRenderFns = []
 
@@ -2708,7 +3973,7 @@ var FuiAlexaNavbar_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaNavbar = (FuiAlexaNavbar_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"47f7adbc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=5004544d&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/alexa/FuiAlexaApp.vue?vue&type=template&id=5004544d&
 var FuiAlexaAppvue_type_template_id_5004544d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"main fui__alexa"},[_vm._t("default",function(){return [_vm._v("Nothing to see here!")]})],2)}
 var FuiAlexaAppvue_type_template_id_5004544d_staticRenderFns = []
 
@@ -2761,8 +4026,2836 @@ var FuiAlexaApp_component = normalizeComponent(
 )
 
 /* harmony default export */ var FuiAlexaApp = (FuiAlexaApp_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaApp.vue?vue&type=template&id=4ce672f0&
+var FuiMambaAppvue_type_template_id_4ce672f0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"main fui__mamba"},[_vm._t("default",function(){return [_vm._v("Flamento UI Mamba Edition!")]})],2)}
+var FuiMambaAppvue_type_template_id_4ce672f0_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaApp.vue?vue&type=template&id=4ce672f0&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaApp.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaAppvue_type_script_lang_js_ = ({
+  name: "FuiMambaApp",
+  props: {
+    hueValue: {
+      type: String,
+      default: '235'
+    }
+  },
+  mounted: function mounted() {
+    document.documentElement.style.setProperty('--hue-color', this.hueValue);
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaApp.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaAppvue_type_script_lang_js_ = (FuiMambaAppvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/mamba/FuiMambaApp.vue?vue&type=style&index=0&lang=css&
+var FuiMambaAppvue_type_style_index_0_lang_css_ = __webpack_require__("2e5a");
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaApp.vue
+
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaApp_component = normalizeComponent(
+  mamba_FuiMambaAppvue_type_script_lang_js_,
+  FuiMambaAppvue_type_template_id_4ce672f0_render,
+  FuiMambaAppvue_type_template_id_4ce672f0_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaApp = (FuiMambaApp_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaNavbar.vue?vue&type=template&id=413d7f36&scoped=true&
+var FuiMambaNavbarvue_type_template_id_413d7f36_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('header',{staticClass:"header",class:{'scroll-header' : _vm.offsetY >= 50},attrs:{"id":"header"}},[_c('nav',{staticClass:"nav container"},[_c('a',{staticClass:"nav__logo",attrs:{"href":"#"}},[_c('img',{staticClass:"nav__logo",attrs:{"src":_vm.logoSrc,"alt":"logo_img"}})]),_c('div',{staticClass:"nav__menu",class:{'show-menu' : _vm.toggle},attrs:{"id":"nav-menu"}},[_c('ul',{staticClass:"nav__list"},_vm._l((_vm.items),function(item,idx){return _c('li',{staticClass:"nav__item"},[_c('a',{staticClass:"nav__link",class:{'active-link' : idx === 0},attrs:{"data-target":'#'+item.id,"href":"javascript:{}"},domProps:{"innerHTML":_vm._s(item.title)},on:{"click":function($event){_vm.toggle = !_vm.toggle; item.onClick()}}})])}),0),_c('div',{staticClass:"nav__close",attrs:{"id":"nav-close"},on:{"click":function($event){_vm.toggle = !_vm.toggle}}},[_c('i',{staticClass:"ri-close-line"})])]),_c('div',{staticClass:"nav__toggle",attrs:{"id":"nav-toggle"},on:{"click":function($event){_vm.toggle = !_vm.toggle}}},[_c('i',{staticClass:"ri-function-line"})])])])}
+var FuiMambaNavbarvue_type_template_id_413d7f36_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaNavbar.vue?vue&type=template&id=413d7f36&scoped=true&
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__("ac1f");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__("5319");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaNavbar.vue?vue&type=script&lang=js&
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaNavbarvue_type_script_lang_js_ = ({
+  name: "FuiMambaNavbar",
+  props: {
+    logoSrc: {
+      type: String,
+      default: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/logo.png'
+    },
+    items: {
+      type: Array,
+      default: function _default() {
+        return [{
+          title: 'Home',
+          id: 'home',
+          onClick: function onClick() {
+            return location.replace('#home');
+          }
+        }, {
+          title: 'Specs',
+          id: 'specs',
+          onClick: function onClick() {
+            return location.replace('#specs');
+          }
+        }, {
+          title: 'Case',
+          id: 'case',
+          onClick: function onClick() {
+            return location.replace('#case');
+          }
+        }, {
+          title: 'Products',
+          id: 'products',
+          onClick: function onClick() {
+            return location.replace('#products');
+          }
+        }];
+      }
+    }
+  },
+  data: function data() {
+    return {
+      toggle: false,
+      offsetY: 0
+    };
+  },
+  methods: {
+    scrollHeader: function scrollHeader() {
+      this.offsetY = window.pageYOffset;
+    },
+    scrollActive: function scrollActive() {
+      var _this = this;
+
+      var sections = document.querySelectorAll('section[id]');
+      sections.forEach(function (current) {
+        var sectionHeight = current.offsetHeight;
+        var sectionTop = current.offsetTop - 50;
+        var sectionId = current.getAttribute('id');
+
+        if (_this.offsetY > sectionTop && _this.offsetY <= sectionTop + sectionHeight) {
+          var _document$querySelect;
+
+          (_document$querySelect = document.querySelector(".nav__menu a[data-target*='".concat(sectionId, "']"))) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.classList.add('active-link');
+        } else {
+          var _document$querySelect2;
+
+          (_document$querySelect2 = document.querySelector(".nav__menu a[data-target*='".concat(sectionId, "']"))) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.classList.remove('active-link');
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.scrollHeader);
+    window.addEventListener('scroll', this.scrollActive);
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaNavbar.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaNavbarvue_type_script_lang_js_ = (FuiMambaNavbarvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/mamba/FuiMambaNavbar.vue?vue&type=style&index=0&id=413d7f36&scoped=true&lang=css&
+var FuiMambaNavbarvue_type_style_index_0_id_413d7f36_scoped_true_lang_css_ = __webpack_require__("e56e");
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaNavbar.vue
+
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaNavbar_component = normalizeComponent(
+  mamba_FuiMambaNavbarvue_type_script_lang_js_,
+  FuiMambaNavbarvue_type_template_id_413d7f36_scoped_true_render,
+  FuiMambaNavbarvue_type_template_id_413d7f36_scoped_true_staticRenderFns,
+  false,
+  null,
+  "413d7f36",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaNavbar = (FuiMambaNavbar_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaHome.vue?vue&type=template&id=29a0b025&scoped=true&
+var FuiMambaHomevue_type_template_id_29a0b025_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"home section",attrs:{"id":"home"}},[_c('div',{staticClass:"home__container container grid"},[_c('div',[_vm._t("img",function(){return [_c('img',{staticClass:"home__img",attrs:{"src":_vm.imgSrc,"alt":"home_img"}})]})],2),_c('div',{staticClass:"home__data"},[_c('div',{staticClass:"home__header"},[_c('h1',{staticClass:"home__title"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('h2',{staticClass:"home__subtitle"},[_vm._t("subtitle",function(){return [_vm._v(_vm._s(_vm.subtitle))]})],2)]),_c('div',{staticClass:"home__footer"},[_c('h3',{staticClass:"home__title-description"},[_vm._t("descriptionTitle",function(){return [_vm._v(_vm._s(_vm.descriptionTitle))]})],2),_c('p',{staticClass:"home__description"},[_vm._t("description",function(){return [_vm._v(_vm._s(_vm.description))]})],2),_vm._t("addToBagBtn",function(){return [_c('a',{staticClass:"button button--flex",attrs:{"href":"javascript:{}"},on:{"click":_vm.addToBagOnClick}},[_c('span',{staticClass:"button--flex"},[_c('i',{class:_vm.addToBagIcon}),_vm._v(" "),_c('span',{domProps:{"innerHTML":_vm._s(_vm.addToBagText)}})]),_c('span',{staticClass:"home__price",domProps:{"innerHTML":_vm._s(_vm.addToBagPrice)}})])]})],2)])])])}
+var FuiMambaHomevue_type_template_id_29a0b025_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaHome.vue?vue&type=template&id=29a0b025&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaHome.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaHomevue_type_script_lang_js_ = ({
+  name: "FuiMambaHome",
+  props: {
+    imgSrc: {
+      type: String,
+      default: "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/home.png"
+    },
+    title: {
+      type: String,
+      default: 'On ear'
+    },
+    subtitle: {
+      type: String,
+      default: 'Beats 3'
+    },
+    descriptionTitle: {
+      type: String,
+      default: 'Overview'
+    },
+    description: {
+      type: String,
+      default: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequatur debitis dignissimos,facilis in incidunt ipsam.'
+    },
+    addToBagText: {
+      type: String,
+      default: 'Add to Bag'
+    },
+    addToBagIcon: {
+      type: String,
+      default: 'ri-shopping-bag-line'
+    },
+    addToBagPrice: {
+      type: String,
+      default: '$291'
+    },
+    addToBagOnClick: {
+      type: Function,
+      default: function _default() {
+        return null;
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaHome.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaHomevue_type_script_lang_js_ = (FuiMambaHomevue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaHome.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaHome_component = normalizeComponent(
+  mamba_FuiMambaHomevue_type_script_lang_js_,
+  FuiMambaHomevue_type_template_id_29a0b025_scoped_true_render,
+  FuiMambaHomevue_type_template_id_29a0b025_scoped_true_staticRenderFns,
+  false,
+  null,
+  "29a0b025",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaHome = (FuiMambaHome_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaSponsor.vue?vue&type=template&id=1ca27bd2&scoped=true&
+var FuiMambaSponsorvue_type_template_id_1ca27bd2_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"sponsor section",attrs:{"id":"sponsor"}},[_c('div',{staticClass:"sponsor__container container grid"},[_vm._t("sponsors",function(){return _vm._l((_vm.items),function(item){return _c('img',{staticClass:"sponsor__img",attrs:{"src":item,"alt":"sponsor_img"}})})})],2)])}
+var FuiMambaSponsorvue_type_template_id_1ca27bd2_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSponsor.vue?vue&type=template&id=1ca27bd2&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaSponsor.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaSponsorvue_type_script_lang_js_ = ({
+  name: "FuiMambaSponsor",
+  props: {
+    items: {
+      type: Array,
+      default: function _default() {
+        return ["https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/sponsor1.png", "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/sponsor2.png", "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/sponsor3.png", "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/sponsor4.png"];
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSponsor.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaSponsorvue_type_script_lang_js_ = (FuiMambaSponsorvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSponsor.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaSponsor_component = normalizeComponent(
+  mamba_FuiMambaSponsorvue_type_script_lang_js_,
+  FuiMambaSponsorvue_type_template_id_1ca27bd2_scoped_true_render,
+  FuiMambaSponsorvue_type_template_id_1ca27bd2_scoped_true_staticRenderFns,
+  false,
+  null,
+  "1ca27bd2",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaSponsor = (FuiMambaSponsor_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaSpecs.vue?vue&type=template&id=4f7dd8b6&scoped=true&
+var FuiMambaSpecsvue_type_template_id_4f7dd8b6_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"specs section grid",attrs:{"id":"specs"}},[_c('h2',{staticClass:"section__title section__title-gradient"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('div',{staticClass:"specs__container container grid"},[_c('div',{staticClass:"specs__content grid"},_vm._l((_vm.items),function(item){return _c('div',{staticClass:"specs__data"},[_c('i',{staticClass:"specs__icon",class:item.icon}),_c('h3',{staticClass:"specs__title",domProps:{"innerHTML":_vm._s(item.title)}}),_c('span',{staticClass:"specs__subtitle",domProps:{"innerHTML":_vm._s(item.description)}})])}),0),_c('div',[_vm._t("img",function(){return [_c('img',{staticClass:"specs__img",attrs:{"src":_vm.imgSrc,"alt":"specs_img"}})]})],2)])])}
+var FuiMambaSpecsvue_type_template_id_4f7dd8b6_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSpecs.vue?vue&type=template&id=4f7dd8b6&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaSpecs.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaSpecsvue_type_script_lang_js_ = ({
+  name: "FuiMambaSpecs",
+  props: {
+    imgSrc: {
+      type: String,
+      default: "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/specs.png"
+    },
+    title: {
+      type: String,
+      default: 'Specs'
+    },
+    items: {
+      type: Array,
+      default: function _default() {
+        return [{
+          icon: 'ri-bluetooth-line',
+          title: 'Connection',
+          description: 'Bluetooth v5.2'
+        }, {
+          icon: 'ri-battery-charge-line',
+          title: 'Battery',
+          description: 'Duration 90h'
+        }, {
+          icon: 'ri-plug-line',
+          title: 'Load',
+          description: 'Fast charge 4.2-AAC'
+        }, {
+          icon: 'ri-mic-line',
+          title: 'Microphone',
+          description: 'Supports Apple Siri <br> and Google'
+        }];
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSpecs.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaSpecsvue_type_script_lang_js_ = (FuiMambaSpecsvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaSpecs.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaSpecs_component = normalizeComponent(
+  mamba_FuiMambaSpecsvue_type_script_lang_js_,
+  FuiMambaSpecsvue_type_template_id_4f7dd8b6_scoped_true_render,
+  FuiMambaSpecsvue_type_template_id_4f7dd8b6_scoped_true_staticRenderFns,
+  false,
+  null,
+  "4f7dd8b6",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaSpecs = (FuiMambaSpecs_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaCase.vue?vue&type=template&id=6a2078ca&scoped=true&
+var FuiMambaCasevue_type_template_id_6a2078ca_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"case section grid",attrs:{"id":"case"}},[_c('h2',{staticClass:"section__title section__title-gradient"},[_vm._t("title",function(){return [_vm._v(_vm._s(_vm.title))]})],2),_c('div',{staticClass:"case__container container grid"},[_c('div',[_vm._t("img",function(){return [_c('img',{staticClass:"case__img",attrs:{"src":_vm.imgSrc,"alt":"case_img"}})]})],2),_c('div',{staticClass:"case__data"},[_c('p',{staticClass:"case__description"},[_vm._t("description",function(){return [_c('span',{domProps:{"innerHTML":_vm._s(_vm.description)}})]})],2),_vm._t("moreInfoBtn",function(){return [_c('a',{staticClass:"button button--flex",attrs:{"href":"javascript:{}"},on:{"click":_vm.moreInfoBtnClick}},[_vm._t("moreInfoBtnIcon",function(){return [_c('i',{staticClass:"button__icon",class:_vm.moreInfoBtnIcon})]}),_vm._v(" "),_vm._t("moreInfoBtnText",function(){return [_c('span',[_vm._v(_vm._s(_vm.moreInfoBtnText))])]})],2)]})],2)])])}
+var FuiMambaCasevue_type_template_id_6a2078ca_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaCase.vue?vue&type=template&id=6a2078ca&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaCase.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaCasevue_type_script_lang_js_ = ({
+  name: "FuiMambaCase",
+  props: {
+    imgSrc: {
+      type: String,
+      default: "https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/case.png"
+    },
+    title: {
+      type: String,
+      default: 'Case'
+    },
+    moreInfoBtnText: {
+      type: String,
+      default: 'More info'
+    },
+    moreInfoBtnIcon: {
+      type: String,
+      default: 'ri-information-line'
+    },
+    moreInfoBtnClick: {
+      type: Function,
+      default: function _default() {
+        return null;
+      }
+    },
+    description: {
+      type: String,
+      default: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, eveniet, exercitationem. Consequuntur ipsa voluptas voluptatem!'
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaCase.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaCasevue_type_script_lang_js_ = (FuiMambaCasevue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaCase.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaCase_component = normalizeComponent(
+  mamba_FuiMambaCasevue_type_script_lang_js_,
+  FuiMambaCasevue_type_template_id_6a2078ca_scoped_true_render,
+  FuiMambaCasevue_type_template_id_6a2078ca_scoped_true_staticRenderFns,
+  false,
+  null,
+  "6a2078ca",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaCase = (FuiMambaCase_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaDiscount.vue?vue&type=template&id=24376648&scoped=true&
+var FuiMambaDiscountvue_type_template_id_24376648_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"discount section",attrs:{"id":"discount"}},[_c('div',{staticClass:"discount__container container grid"},[_c('div',{staticClass:"discount__animate"},[_c('h2',{staticClass:"discount__title"},[_vm._t("title",function(){return [_c('span',{domProps:{"innerHTML":_vm._s(_vm.title)}})]})],2),_c('p',{staticClass:"discount__description"},[_vm._t("subtitle",function(){return [_c('span',{domProps:{"innerHTML":_vm._s(_vm.subtitle)}})]})],2),_vm._t("shopBtn",function(){return [_c('a',{staticClass:"button button--flex",attrs:{"href":"javascript:{}"},on:{"click":_vm.shopNowBtnClick}},[_vm._t("shopNowBtnIcon",function(){return [_c('i',{staticClass:"button__icon",class:_vm.shopNowBtnIcon})]}),_vm._v(" "),_vm._t("shopNowBtnText",function(){return [_vm._v(_vm._s(_vm.shopNowBtnText))]})],2)]})],2),_vm._t("img",function(){return [_c('img',{staticClass:"discount__img",attrs:{"src":_vm.imgSrc,"alt":"discount_img"}})]})],2)])}
+var FuiMambaDiscountvue_type_template_id_24376648_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaDiscount.vue?vue&type=template&id=24376648&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaDiscount.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaDiscountvue_type_script_lang_js_ = ({
+  name: "FuiMambaDiscount",
+  props: {
+    title: {
+      type: String,
+      default: 'Immerse yourself in your music'
+    },
+    imgSrc: {
+      type: String,
+      default: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/discount.png'
+    },
+    subtitle: {
+      type: String,
+      default: 'Get it now, up to 50% off.'
+    },
+    shopNowBtnText: {
+      type: String,
+      default: 'Shop Now'
+    },
+    shopNowBtnIcon: {
+      type: String,
+      default: 'ri-shopping-bag-line'
+    },
+    shopNowBtnClick: {
+      type: Function,
+      default: function _default() {
+        return null;
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaDiscount.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaDiscountvue_type_script_lang_js_ = (FuiMambaDiscountvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaDiscount.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaDiscount_component = normalizeComponent(
+  mamba_FuiMambaDiscountvue_type_script_lang_js_,
+  FuiMambaDiscountvue_type_template_id_24376648_scoped_true_render,
+  FuiMambaDiscountvue_type_template_id_24376648_scoped_true_staticRenderFns,
+  false,
+  null,
+  "24376648",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaDiscount = (FuiMambaDiscount_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaProducts.vue?vue&type=template&id=1b9b2c71&scoped=true&
+var FuiMambaProductsvue_type_template_id_1b9b2c71_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('section',{staticClass:"products section",attrs:{"id":"products"}},[_c('h2',{staticClass:"section__title section__title-gradient products__line"},[_vm._t("title",function(){return [_c('span',{domProps:{"innerHTML":_vm._s(_vm.title)}})]})],2),_c('div',{staticClass:"products__container container grid"},_vm._l((_vm.items),function(item){return _c('article',{staticClass:"products__card"},[_c('div',{staticClass:"products__content"},[_c('img',{staticClass:"products__img",attrs:{"src":item.imgSrc,"alt":"product_img"}}),_c('h3',{staticClass:"products__title",domProps:{"innerHTML":_vm._s((item.title.length > 16) ? item.title.substr(0, 16-1) + '&hellip;' : item.title)}}),_c('span',{staticClass:"products__price",domProps:{"innerHTML":_vm._s((item.price.length > 9) ? item.price.substr(0, 9-1) + '&hellip;' : item.price)}}),_c('button',{staticClass:"button button--flex products__button",on:{"click":item.onClick}},[_c('i',{staticClass:"ri-shopping-bag-line button__icon"})])])])}),0)])}
+var FuiMambaProductsvue_type_template_id_1b9b2c71_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaProducts.vue?vue&type=template&id=1b9b2c71&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaProducts.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaProductsvue_type_script_lang_js_ = ({
+  name: "FuiMambaProducts",
+  props: {
+    title: {
+      type: String,
+      default: 'Choose <br> Your Style'
+    },
+    items: {
+      type: Array,
+      default: function _default() {
+        return [{
+          title: 'Black',
+          price: '$249',
+          onClick: function onClick() {
+            return null;
+          },
+          imgSrc: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/product1.png'
+        }, {
+          title: 'Red Black',
+          price: '$249',
+          onClick: function onClick() {
+            return null;
+          },
+          imgSrc: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/product2.png'
+        }, {
+          title: 'Night Black',
+          price: '$249',
+          onClick: function onClick() {
+            return null;
+          },
+          imgSrc: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/product3.png'
+        }, {
+          title: 'Blue',
+          price: '$249',
+          onClick: function onClick() {
+            return null;
+          },
+          imgSrc: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/product4.png'
+        }, {
+          title: 'Twilight Black',
+          price: '$232',
+          onClick: function onClick() {
+            return null;
+          },
+          imgSrc: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/product5.png'
+        }];
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaProducts.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaProductsvue_type_script_lang_js_ = (FuiMambaProductsvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaProducts.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaProducts_component = normalizeComponent(
+  mamba_FuiMambaProductsvue_type_script_lang_js_,
+  FuiMambaProductsvue_type_template_id_1b9b2c71_scoped_true_render,
+  FuiMambaProductsvue_type_template_id_1b9b2c71_scoped_true_staticRenderFns,
+  false,
+  null,
+  "1b9b2c71",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaProducts = (FuiMambaProducts_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaFooter.vue?vue&type=template&id=dcafd0e4&
+var FuiMambaFootervue_type_template_id_dcafd0e4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('footer',{staticClass:"footer section"},[_c('div',{staticClass:"footer__container container grid"},[_vm._t("logo",function(){return [_c('a',{staticClass:"footer__logo",attrs:{"href":"#"}},[_c('img',{attrs:{"src":_vm.logoSrc,"alt":"footer_logo"}})])]}),_c('div',{staticClass:"footer__content-links"},[_vm._t("links",function(){return _vm._l((_vm.links),function(item){return _c('div',{staticClass:"footer__content footer__content-link"},[_c('h3',{staticClass:"footer__title",domProps:{"innerHTML":_vm._s(item.title)}}),_c('ul',{staticClass:"footer__links"},_vm._l((item.links),function(link){return _c('li',[_c('a',{staticClass:"footer__link",attrs:{"href":"#"},domProps:{"innerHTML":_vm._s(link.title)},on:{"click":link.onClick}})])}),0)])})})],2),_c('div',{staticClass:"footer__content"},[_vm._t("newspaperForm",function(){return [(_vm.email)?_c('form',{staticClass:"footer__form",attrs:{"action":'https://formsubmit.co/'+_vm.email,"method":"POST"}},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.subscriber),expression:"subscriber"}],staticClass:"footer__input",attrs:{"placeholder":"Email","type":"email","required":""},domProps:{"value":(_vm.subscriber)},on:{"input":function($event){if($event.target.composing){ return; }_vm.subscriber=$event.target.value}}}),_vm._m(0)]):_vm._e()]}),_vm._t("social",function(){return [_c('div',{staticClass:"footer__social"},_vm._l((_vm.socials),function(social){return _c('a',{staticClass:"footer__social-link",attrs:{"href":"javascript:{}"},on:{"click":social.onClick}},[_c('i',{class:social.icon})])}),0)]})],2)],2),_vm._t("copy",function(){return [_c('p',{staticClass:"footer__copy"},[_c('a',{staticClass:"footer__copy-link",attrs:{"href":"javascript:{}"},domProps:{"innerHTML":_vm._s(_vm.copy)}})])]})],2)}
+var FuiMambaFootervue_type_template_id_dcafd0e4_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"button button-flex",attrs:{"type":"submit"}},[_c('i',{staticClass:"ri-send-plane-line button__icon"}),_vm._v(" Subscribe ")])}]
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaFooter.vue?vue&type=template&id=dcafd0e4&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaFooter.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaFootervue_type_script_lang_js_ = ({
+  name: "FuiMambaFooter",
+  props: {
+    logoSrc: {
+      type: String,
+      default: 'https://raw.githubusercontent.com/bedimcode/responsive-landing-page-headphones/main/assets/img/logo.png'
+    },
+    email: {
+      type: String,
+      default: 'j.doe@email.com'
+    },
+    copy: {
+      type: String,
+      default: '&#169; Flamento. All rights reserved.'
+    },
+    socials: {
+      type: Array,
+      default: function _default() {
+        return [{
+          icon: 'ri-facebook-fill',
+          onClick: function onClick() {
+            return null;
+          }
+        }, {
+          icon: 'ri-instagram-line',
+          onClick: function onClick() {
+            return null;
+          }
+        }, {
+          icon: 'ri-twitter-line',
+          onClick: function onClick() {
+            return null;
+          }
+        }];
+      }
+    },
+    links: {
+      type: Array,
+      default: function _default() {
+        return [{
+          title: 'Products',
+          links: [{
+            title: 'Headphones',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Earphones',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Earbuds',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Accessories',
+            onClick: function onClick() {
+              return null;
+            }
+          }]
+        }, {
+          title: 'Support',
+          links: [{
+            title: 'Product Help',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Register',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Support',
+            onClick: function onClick() {
+              return null;
+            }
+          }, {
+            title: 'Provides',
+            onClick: function onClick() {
+              return null;
+            }
+          }]
+        }];
+      }
+    }
+  },
+  data: function data() {
+    return {
+      subscriber: ''
+    };
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaFooter.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaFootervue_type_script_lang_js_ = (FuiMambaFootervue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaFooter.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaFooter_component = normalizeComponent(
+  mamba_FuiMambaFootervue_type_script_lang_js_,
+  FuiMambaFootervue_type_template_id_dcafd0e4_render,
+  FuiMambaFootervue_type_template_id_dcafd0e4_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaFooter = (FuiMambaFooter_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaScrollUp.vue?vue&type=template&id=0111c2dd&scoped=true&
+var FuiMambaScrollUpvue_type_template_id_0111c2dd_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a',{staticClass:"scrollUp",class:{'show-scroll' : _vm.scrollY >= 200},attrs:{"href":"#","id":"scrollUp"}},[_c('i',{staticClass:"ri-arrow-up-s-line scrollUp__icon"})])}
+var FuiMambaScrollUpvue_type_template_id_0111c2dd_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollUp.vue?vue&type=template&id=0111c2dd&scoped=true&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaScrollUp.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaScrollUpvue_type_script_lang_js_ = ({
+  name: "FuiMambaScrollUp",
+  data: function data() {
+    return {
+      scrollY: 0
+    };
+  },
+  methods: {
+    scroll: function scroll() {
+      this.scrollY = window.pageYOffset;
+    }
+  },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.scroll);
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollUp.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaScrollUpvue_type_script_lang_js_ = (FuiMambaScrollUpvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/mamba/FuiMambaScrollUp.vue?vue&type=style&index=0&id=0111c2dd&scoped=true&lang=css&
+var FuiMambaScrollUpvue_type_style_index_0_id_0111c2dd_scoped_true_lang_css_ = __webpack_require__("d8d1");
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollUp.vue
+
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaScrollUp_component = normalizeComponent(
+  mamba_FuiMambaScrollUpvue_type_script_lang_js_,
+  FuiMambaScrollUpvue_type_template_id_0111c2dd_scoped_true_render,
+  FuiMambaScrollUpvue_type_template_id_0111c2dd_scoped_true_staticRenderFns,
+  false,
+  null,
+  "0111c2dd",
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaScrollUp = (FuiMambaScrollUp_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaScrollReveal.vue?vue&type=template&id=53e6378c&
+var FuiMambaScrollRevealvue_type_template_id_53e6378c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c("div")}
+var FuiMambaScrollRevealvue_type_template_id_53e6378c_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollReveal.vue?vue&type=template&id=53e6378c&
+
+// CONCATENATED MODULE: ./node_modules/is-dom-node/dist/is-dom-node.es.js
+/*! @license is-dom-node v1.0.4
+
+	Copyright 2018 Fisssion LLC.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+function isDomNode(x) {
+	return typeof window.Node === 'object'
+		? x instanceof window.Node
+		: x !== null &&
+				typeof x === 'object' &&
+				typeof x.nodeType === 'number' &&
+				typeof x.nodeName === 'string'
+}
+
+/* harmony default export */ var is_dom_node_es = (isDomNode);
+
+// CONCATENATED MODULE: ./node_modules/is-dom-node-list/dist/is-dom-node-list.es.js
+/*! @license is-dom-node-list v1.2.1
+
+	Copyright 2018 Fisssion LLC.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+
+
+function isDomNodeList(x) {
+	var prototypeToString = Object.prototype.toString.call(x);
+	var regex = /^\[object (HTMLCollection|NodeList|Object)\]$/;
+
+	return typeof window.NodeList === 'object'
+		? x instanceof window.NodeList
+		: x !== null &&
+				typeof x === 'object' &&
+				typeof x.length === 'number' &&
+				regex.test(prototypeToString) &&
+				(x.length === 0 || is_dom_node_es(x[0]))
+}
+
+/* harmony default export */ var is_dom_node_list_es = (isDomNodeList);
+
+// CONCATENATED MODULE: ./node_modules/tealight/dist/tealight.es.js
+/*! @license Tealight v0.3.6
+
+	Copyright 2018 Fisssion LLC.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+
+
+
+function tealight(target, context) {
+  if ( context === void 0 ) context = document;
+
+  if (target instanceof Array) { return target.filter(is_dom_node_es); }
+  if (is_dom_node_es(target)) { return [target]; }
+  if (is_dom_node_list_es(target)) { return Array.prototype.slice.call(target); }
+  if (typeof target === "string") {
+    try {
+      var query = context.querySelectorAll(target);
+      return Array.prototype.slice.call(query);
+    } catch (err) {
+      return [];
+    }
+  }
+  return [];
+}
+
+/* harmony default export */ var tealight_es = (tealight);
+
+// CONCATENATED MODULE: ./node_modules/rematrix/dist/rematrix.es.js
+/*! @license Rematrix v0.3.0
+
+	Copyright 2018 Julian Lloyd.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
+*/
+/**
+ * @module Rematrix
+ */
+
+/**
+ * Transformation matrices in the browser come in two flavors:
+ *
+ *  - `matrix` using 6 values (short)
+ *  - `matrix3d` using 16 values (long)
+ *
+ * This utility follows this [conversion guide](https://goo.gl/EJlUQ1)
+ * to expand short form matrices to their equivalent long form.
+ *
+ * @param  {array} source - Accepts both short and long form matrices.
+ * @return {array}
+ */
+function format(source) {
+	if (source.constructor !== Array) {
+		throw new TypeError('Expected array.')
+	}
+	if (source.length === 16) {
+		return source
+	}
+	if (source.length === 6) {
+		var matrix = identity();
+		matrix[0] = source[0];
+		matrix[1] = source[1];
+		matrix[4] = source[2];
+		matrix[5] = source[3];
+		matrix[12] = source[4];
+		matrix[13] = source[5];
+		return matrix
+	}
+	throw new RangeError('Expected array with either 6 or 16 values.')
+}
+
+/**
+ * Returns a matrix representing no transformation. The product of any matrix
+ * multiplied by the identity matrix will be the original matrix.
+ *
+ * > **Tip:** Similar to how `5 * 1 === 5`, where `1` is the identity.
+ *
+ * @return {array}
+ */
+function identity() {
+	var matrix = [];
+	for (var i = 0; i < 16; i++) {
+		i % 5 == 0 ? matrix.push(1) : matrix.push(0);
+	}
+	return matrix
+}
+
+/**
+ * Returns a matrix describing the inverse transformation of the source
+ * matrix. The product of any matrix multiplied by its inverse will be the
+ * identity matrix.
+ *
+ * > **Tip:** Similar to how `5 * (1/5) === 1`, where `1/5` is the inverse.
+ *
+ * @param  {array} source - Accepts both short and long form matrices.
+ * @return {array}
+ */
+function inverse(source) {
+	var m = format(source);
+
+	var s0 = m[0] * m[5] - m[4] * m[1];
+	var s1 = m[0] * m[6] - m[4] * m[2];
+	var s2 = m[0] * m[7] - m[4] * m[3];
+	var s3 = m[1] * m[6] - m[5] * m[2];
+	var s4 = m[1] * m[7] - m[5] * m[3];
+	var s5 = m[2] * m[7] - m[6] * m[3];
+
+	var c5 = m[10] * m[15] - m[14] * m[11];
+	var c4 = m[9] * m[15] - m[13] * m[11];
+	var c3 = m[9] * m[14] - m[13] * m[10];
+	var c2 = m[8] * m[15] - m[12] * m[11];
+	var c1 = m[8] * m[14] - m[12] * m[10];
+	var c0 = m[8] * m[13] - m[12] * m[9];
+
+	var determinant = 1 / (s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0);
+
+	if (isNaN(determinant) || determinant === Infinity) {
+		throw new Error('Inverse determinant attempted to divide by zero.')
+	}
+
+	return [
+		(m[5] * c5 - m[6] * c4 + m[7] * c3) * determinant,
+		(-m[1] * c5 + m[2] * c4 - m[3] * c3) * determinant,
+		(m[13] * s5 - m[14] * s4 + m[15] * s3) * determinant,
+		(-m[9] * s5 + m[10] * s4 - m[11] * s3) * determinant,
+
+		(-m[4] * c5 + m[6] * c2 - m[7] * c1) * determinant,
+		(m[0] * c5 - m[2] * c2 + m[3] * c1) * determinant,
+		(-m[12] * s5 + m[14] * s2 - m[15] * s1) * determinant,
+		(m[8] * s5 - m[10] * s2 + m[11] * s1) * determinant,
+
+		(m[4] * c4 - m[5] * c2 + m[7] * c0) * determinant,
+		(-m[0] * c4 + m[1] * c2 - m[3] * c0) * determinant,
+		(m[12] * s4 - m[13] * s2 + m[15] * s0) * determinant,
+		(-m[8] * s4 + m[9] * s2 - m[11] * s0) * determinant,
+
+		(-m[4] * c3 + m[5] * c1 - m[6] * c0) * determinant,
+		(m[0] * c3 - m[1] * c1 + m[2] * c0) * determinant,
+		(-m[12] * s3 + m[13] * s1 - m[14] * s0) * determinant,
+		(m[8] * s3 - m[9] * s1 + m[10] * s0) * determinant
+	]
+}
+
+/**
+ * Returns a 4x4 matrix describing the combined transformations
+ * of both arguments.
+ *
+ * > **Note:** Order is very important. For example, rotating 45°
+ * along the Z-axis, followed by translating 500 pixels along the
+ * Y-axis... is not the same as translating 500 pixels along the
+ * Y-axis, followed by rotating 45° along on the Z-axis.
+ *
+ * @param  {array} m - Accepts both short and long form matrices.
+ * @param  {array} x - Accepts both short and long form matrices.
+ * @return {array}
+ */
+function multiply(m, x) {
+	var fm = format(m);
+	var fx = format(x);
+	var product = [];
+
+	for (var i = 0; i < 4; i++) {
+		var row = [fm[i], fm[i + 4], fm[i + 8], fm[i + 12]];
+		for (var j = 0; j < 4; j++) {
+			var k = j * 4;
+			var col = [fx[k], fx[k + 1], fx[k + 2], fx[k + 3]];
+			var result =
+				row[0] * col[0] + row[1] * col[1] + row[2] * col[2] + row[3] * col[3];
+
+			product[i + k] = result;
+		}
+	}
+
+	return product
+}
+
+/**
+ * Attempts to return a 4x4 matrix describing the CSS transform
+ * matrix passed in, but will return the identity matrix as a
+ * fallback.
+ *
+ * > **Tip:** This method is used to convert a CSS matrix (retrieved as a
+ * `string` from computed styles) to its equivalent array format.
+ *
+ * @param  {string} source - `matrix` or `matrix3d` CSS Transform value.
+ * @return {array}
+ */
+function parse(source) {
+	if (typeof source === 'string') {
+		var match = source.match(/matrix(3d)?\(([^)]+)\)/);
+		if (match) {
+			var raw = match[2].split(', ').map(parseFloat);
+			return format(raw)
+		}
+	}
+	return identity()
+}
+
+/**
+ * Returns a 4x4 matrix describing Z-axis rotation.
+ *
+ * > **Tip:** This is just an alias for `Rematrix.rotateZ` for parity with CSS
+ *
+ * @param  {number} angle - Measured in degrees.
+ * @return {array}
+ */
+function rotate(angle) {
+	return rotateZ(angle)
+}
+
+/**
+ * Returns a 4x4 matrix describing X-axis rotation.
+ *
+ * @param  {number} angle - Measured in degrees.
+ * @return {array}
+ */
+function rotateX(angle) {
+	var theta = Math.PI / 180 * angle;
+	var matrix = identity();
+
+	matrix[5] = matrix[10] = Math.cos(theta);
+	matrix[6] = matrix[9] = Math.sin(theta);
+	matrix[9] *= -1;
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Y-axis rotation.
+ *
+ * @param  {number} angle - Measured in degrees.
+ * @return {array}
+ */
+function rotateY(angle) {
+	var theta = Math.PI / 180 * angle;
+	var matrix = identity();
+
+	matrix[0] = matrix[10] = Math.cos(theta);
+	matrix[2] = matrix[8] = Math.sin(theta);
+	matrix[2] *= -1;
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Z-axis rotation.
+ *
+ * @param  {number} angle - Measured in degrees.
+ * @return {array}
+ */
+function rotateZ(angle) {
+	var theta = Math.PI / 180 * angle;
+	var matrix = identity();
+
+	matrix[0] = matrix[5] = Math.cos(theta);
+	matrix[1] = matrix[4] = Math.sin(theta);
+	matrix[4] *= -1;
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing 2D scaling. The first argument
+ * is used for both X and Y-axis scaling, unless an optional
+ * second argument is provided to explicitly define Y-axis scaling.
+ *
+ * @param  {number} scalar    - Decimal multiplier.
+ * @param  {number} [scalarY] - Decimal multiplier.
+ * @return {array}
+ */
+function scale(scalar, scalarY) {
+	var matrix = identity();
+
+	matrix[0] = scalar;
+	matrix[5] = typeof scalarY === 'number' ? scalarY : scalar;
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing X-axis scaling.
+ *
+ * @param  {number} scalar - Decimal multiplier.
+ * @return {array}
+ */
+function scaleX(scalar) {
+	var matrix = identity();
+	matrix[0] = scalar;
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Y-axis scaling.
+ *
+ * @param  {number} scalar - Decimal multiplier.
+ * @return {array}
+ */
+function scaleY(scalar) {
+	var matrix = identity();
+	matrix[5] = scalar;
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Z-axis scaling.
+ *
+ * @param  {number} scalar - Decimal multiplier.
+ * @return {array}
+ */
+function scaleZ(scalar) {
+	var matrix = identity();
+	matrix[10] = scalar;
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing shear. The first argument
+ * defines X-axis shearing, and an optional second argument
+ * defines Y-axis shearing.
+ *
+ * @param  {number} angleX   - Measured in degrees.
+ * @param  {number} [angleY] - Measured in degrees.
+ * @return {array}
+ */
+function skew(angleX, angleY) {
+	var thetaX = Math.PI / 180 * angleX;
+	var matrix = identity();
+
+	matrix[4] = Math.tan(thetaX);
+
+	if (angleY) {
+		var thetaY = Math.PI / 180 * angleY;
+		matrix[1] = Math.tan(thetaY);
+	}
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing X-axis shear.
+ *
+ * @param  {number} angle - Measured in degrees.
+ * @return {array}
+ */
+function skewX(angle) {
+	var theta = Math.PI / 180 * angle;
+	var matrix = identity();
+
+	matrix[4] = Math.tan(theta);
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Y-axis shear.
+ *
+ * @param  {number} angle - Measured in degrees
+ * @return {array}
+ */
+function skewY(angle) {
+	var theta = Math.PI / 180 * angle;
+	var matrix = identity();
+
+	matrix[1] = Math.tan(theta);
+
+	return matrix
+}
+
+/**
+ * Returns a CSS Transform property value equivalent to the source matrix.
+ *
+ * @param  {array} source - Accepts both short and long form matrices.
+ * @return {string}
+ */
+function rematrix_es_toString(source) {
+	return ("matrix3d(" + (format(source).join(', ')) + ")")
+}
+
+/**
+ * Returns a 4x4 matrix describing 2D translation. The first
+ * argument defines X-axis translation, and an optional second
+ * argument defines Y-axis translation.
+ *
+ * @param  {number} distanceX   - Measured in pixels.
+ * @param  {number} [distanceY] - Measured in pixels.
+ * @return {array}
+ */
+function translate(distanceX, distanceY) {
+	var matrix = identity();
+	matrix[12] = distanceX;
+
+	if (distanceY) {
+		matrix[13] = distanceY;
+	}
+
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing X-axis translation.
+ *
+ * @param  {number} distance - Measured in pixels.
+ * @return {array}
+ */
+function translateX(distance) {
+	var matrix = identity();
+	matrix[12] = distance;
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Y-axis translation.
+ *
+ * @param  {number} distance - Measured in pixels.
+ * @return {array}
+ */
+function translateY(distance) {
+	var matrix = identity();
+	matrix[13] = distance;
+	return matrix
+}
+
+/**
+ * Returns a 4x4 matrix describing Z-axis translation.
+ *
+ * @param  {number} distance - Measured in pixels.
+ * @return {array}
+ */
+function translateZ(distance) {
+	var matrix = identity();
+	matrix[14] = distance;
+	return matrix
+}
+
+
+
+// CONCATENATED MODULE: ./node_modules/miniraf/dist/miniraf.es.js
+/*! @license miniraf v1.0.0
+
+	Copyright 2018 Fisssion LLC.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+var polyfill = (function () {
+	var clock = Date.now();
+
+	return function (callback) {
+		var currentTime = Date.now();
+		if (currentTime - clock > 16) {
+			clock = currentTime;
+			callback(currentTime);
+		} else {
+			setTimeout(function () { return polyfill(callback); }, 0);
+		}
+	}
+})();
+
+var index = window.requestAnimationFrame ||
+	window.webkitRequestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	polyfill;
+
+/* harmony default export */ var miniraf_es = (index);
+
+// CONCATENATED MODULE: ./node_modules/scrollreveal/dist/scrollreveal.es.js
+/*! @license ScrollReveal v4.0.9
+
+	Copyright 2021 Fisssion LLC.
+
+	Licensed under the GNU General Public License 3.0 for
+	compatible open source projects and non-commercial use.
+
+	For commercial sites, themes, projects, and applications,
+	keep your source code private/proprietary by purchasing
+	a commercial license from https://scrollrevealjs.org/
+*/
+
+
+
+
+var defaults = {
+	delay: 0,
+	distance: '0',
+	duration: 600,
+	easing: 'cubic-bezier(0.5, 0, 0, 1)',
+	interval: 0,
+	opacity: 0,
+	origin: 'bottom',
+	rotate: {
+		x: 0,
+		y: 0,
+		z: 0
+	},
+	scale: 1,
+	cleanup: false,
+	container: document.documentElement,
+	desktop: true,
+	mobile: true,
+	reset: false,
+	useDelay: 'always',
+	viewFactor: 0.0,
+	viewOffset: {
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0
+	},
+	afterReset: function afterReset() {},
+	afterReveal: function afterReveal() {},
+	beforeReset: function beforeReset() {},
+	beforeReveal: function beforeReveal() {}
+};
+
+function failure() {
+	document.documentElement.classList.remove('sr');
+
+	return {
+		clean: function clean() {},
+		destroy: function destroy() {},
+		reveal: function reveal() {},
+		sync: function sync() {},
+		get noop() {
+			return true
+		}
+	}
+}
+
+function success() {
+	document.documentElement.classList.add('sr');
+
+	if (document.body) {
+		document.body.style.height = '100%';
+	} else {
+		document.addEventListener('DOMContentLoaded', function () {
+			document.body.style.height = '100%';
+		});
+	}
+}
+
+var mount = { success: success, failure: failure };
+
+function isObject(x) {
+	return (
+		x !== null &&
+		x instanceof Object &&
+		(x.constructor === Object ||
+			Object.prototype.toString.call(x) === '[object Object]')
+	)
+}
+
+function each(collection, callback) {
+	if (isObject(collection)) {
+		var keys = Object.keys(collection);
+		return keys.forEach(function (key) { return callback(collection[key], key, collection); })
+	}
+	if (collection instanceof Array) {
+		return collection.forEach(function (item, i) { return callback(item, i, collection); })
+	}
+	throw new TypeError('Expected either an array or object literal.')
+}
+
+function logger(message) {
+	var details = [], len = arguments.length - 1;
+	while ( len-- > 0 ) details[ len ] = arguments[ len + 1 ];
+
+	if (this.constructor.debug && console) {
+		var report = "%cScrollReveal: " + message;
+		details.forEach(function (detail) { return (report += "\n — " + detail); });
+		console.log(report, 'color: #ea654b;'); // eslint-disable-line no-console
+	}
+}
+
+function rinse() {
+	var this$1 = this;
+
+	var struct = function () { return ({
+		active: [],
+		stale: []
+	}); };
+
+	var elementIds = struct();
+	var sequenceIds = struct();
+	var containerIds = struct();
+
+	/**
+	 * Take stock of active element IDs.
+	 */
+	try {
+		each(tealight_es('[data-sr-id]'), function (node) {
+			var id = parseInt(node.getAttribute('data-sr-id'));
+			elementIds.active.push(id);
+		});
+	} catch (e) {
+		throw e
+	}
+	/**
+	 * Destroy stale elements.
+	 */
+	each(this.store.elements, function (element) {
+		if (elementIds.active.indexOf(element.id) === -1) {
+			elementIds.stale.push(element.id);
+		}
+	});
+
+	each(elementIds.stale, function (staleId) { return delete this$1.store.elements[staleId]; });
+
+	/**
+	 * Take stock of active container and sequence IDs.
+	 */
+	each(this.store.elements, function (element) {
+		if (containerIds.active.indexOf(element.containerId) === -1) {
+			containerIds.active.push(element.containerId);
+		}
+		if (element.hasOwnProperty('sequence')) {
+			if (sequenceIds.active.indexOf(element.sequence.id) === -1) {
+				sequenceIds.active.push(element.sequence.id);
+			}
+		}
+	});
+
+	/**
+	 * Destroy stale containers.
+	 */
+	each(this.store.containers, function (container) {
+		if (containerIds.active.indexOf(container.id) === -1) {
+			containerIds.stale.push(container.id);
+		}
+	});
+
+	each(containerIds.stale, function (staleId) {
+		var stale = this$1.store.containers[staleId].node;
+		stale.removeEventListener('scroll', this$1.delegate);
+		stale.removeEventListener('resize', this$1.delegate);
+		delete this$1.store.containers[staleId];
+	});
+
+	/**
+	 * Destroy stale sequences.
+	 */
+	each(this.store.sequences, function (sequence) {
+		if (sequenceIds.active.indexOf(sequence.id) === -1) {
+			sequenceIds.stale.push(sequence.id);
+		}
+	});
+
+	each(sequenceIds.stale, function (staleId) { return delete this$1.store.sequences[staleId]; });
+}
+
+var getPrefixedCssProp = (function () {
+	var properties = {};
+	var style = document.documentElement.style;
+
+	function getPrefixedCssProperty(name, source) {
+		if ( source === void 0 ) source = style;
+
+		if (name && typeof name === 'string') {
+			if (properties[name]) {
+				return properties[name]
+			}
+			if (typeof source[name] === 'string') {
+				return (properties[name] = name)
+			}
+			if (typeof source[("-webkit-" + name)] === 'string') {
+				return (properties[name] = "-webkit-" + name)
+			}
+			throw new RangeError(("Unable to find \"" + name + "\" style property."))
+		}
+		throw new TypeError('Expected a string.')
+	}
+
+	getPrefixedCssProperty.clearCache = function () { return (properties = {}); };
+
+	return getPrefixedCssProperty
+})();
+
+function style(element) {
+	var computed = window.getComputedStyle(element.node);
+	var position = computed.position;
+	var config = element.config;
+
+	/**
+	 * Generate inline styles
+	 */
+	var inline = {};
+	var inlineStyle = element.node.getAttribute('style') || '';
+	var inlineMatch = inlineStyle.match(/[\w-]+\s*:\s*[^;]+\s*/gi) || [];
+
+	inline.computed = inlineMatch ? inlineMatch.map(function (m) { return m.trim(); }).join('; ') + ';' : '';
+
+	inline.generated = inlineMatch.some(function (m) { return m.match(/visibility\s?:\s?visible/i); })
+		? inline.computed
+		: inlineMatch.concat( ['visibility: visible']).map(function (m) { return m.trim(); }).join('; ') + ';';
+
+	/**
+	 * Generate opacity styles
+	 */
+	var computedOpacity = parseFloat(computed.opacity);
+	var configOpacity = !isNaN(parseFloat(config.opacity))
+		? parseFloat(config.opacity)
+		: parseFloat(computed.opacity);
+
+	var opacity = {
+		computed: computedOpacity !== configOpacity ? ("opacity: " + computedOpacity + ";") : '',
+		generated: computedOpacity !== configOpacity ? ("opacity: " + configOpacity + ";") : ''
+	};
+
+	/**
+	 * Generate transformation styles
+	 */
+	var transformations = [];
+
+	if (parseFloat(config.distance)) {
+		var axis = config.origin === 'top' || config.origin === 'bottom' ? 'Y' : 'X';
+
+		/**
+		 * Let’s make sure our our pixel distances are negative for top and left.
+		 * e.g. { origin: 'top', distance: '25px' } starts at `top: -25px` in CSS.
+		 */
+		var distance = config.distance;
+		if (config.origin === 'top' || config.origin === 'left') {
+			distance = /^-/.test(distance) ? distance.substr(1) : ("-" + distance);
+		}
+
+		var ref = distance.match(/(^-?\d+\.?\d?)|(em$|px$|%$)/g);
+		var value = ref[0];
+		var unit = ref[1];
+
+		switch (unit) {
+			case 'em':
+				distance = parseInt(computed.fontSize) * value;
+				break
+			case 'px':
+				distance = value;
+				break
+			case '%':
+				/**
+				 * Here we use `getBoundingClientRect` instead of
+				 * the existing data attached to `element.geometry`
+				 * because only the former includes any transformations
+				 * current applied to the element.
+				 *
+				 * If that behavior ends up being unintuitive, this
+				 * logic could instead utilize `element.geometry.height`
+				 * and `element.geoemetry.width` for the distance calculation
+				 */
+				distance =
+					axis === 'Y'
+						? (element.node.getBoundingClientRect().height * value) / 100
+						: (element.node.getBoundingClientRect().width * value) / 100;
+				break
+			default:
+				throw new RangeError('Unrecognized or missing distance unit.')
+		}
+
+		if (axis === 'Y') {
+			transformations.push(translateY(distance));
+		} else {
+			transformations.push(translateX(distance));
+		}
+	}
+
+	if (config.rotate.x) { transformations.push(rotateX(config.rotate.x)); }
+	if (config.rotate.y) { transformations.push(rotateY(config.rotate.y)); }
+	if (config.rotate.z) { transformations.push(rotateZ(config.rotate.z)); }
+	if (config.scale !== 1) {
+		if (config.scale === 0) {
+			/**
+			 * The CSS Transforms matrix interpolation specification
+			 * basically disallows transitions of non-invertible
+			 * matrixes, which means browsers won't transition
+			 * elements with zero scale.
+			 *
+			 * That’s inconvenient for the API and developer
+			 * experience, so we simply nudge their value
+			 * slightly above zero; this allows browsers
+			 * to transition our element as expected.
+			 *
+			 * `0.0002` was the smallest number
+			 * that performed across browsers.
+			 */
+			transformations.push(scale(0.0002));
+		} else {
+			transformations.push(scale(config.scale));
+		}
+	}
+
+	var transform = {};
+	if (transformations.length) {
+		transform.property = getPrefixedCssProp('transform');
+		/**
+		 * The default computed transform value should be one of:
+		 * undefined || 'none' || 'matrix()' || 'matrix3d()'
+		 */
+		transform.computed = {
+			raw: computed[transform.property],
+			matrix: parse(computed[transform.property])
+		};
+
+		transformations.unshift(transform.computed.matrix);
+		var product = transformations.reduce(multiply);
+
+		transform.generated = {
+			initial: ((transform.property) + ": matrix3d(" + (product.join(', ')) + ");"),
+			final: ((transform.property) + ": matrix3d(" + (transform.computed.matrix.join(', ')) + ");")
+		};
+	} else {
+		transform.generated = {
+			initial: '',
+			final: ''
+		};
+	}
+
+	/**
+	 * Generate transition styles
+	 */
+	var transition = {};
+	if (opacity.generated || transform.generated.initial) {
+		transition.property = getPrefixedCssProp('transition');
+		transition.computed = computed[transition.property];
+		transition.fragments = [];
+
+		var delay = config.delay;
+		var duration = config.duration;
+		var easing = config.easing;
+
+		if (opacity.generated) {
+			transition.fragments.push({
+				delayed: ("opacity " + (duration / 1000) + "s " + easing + " " + (delay / 1000) + "s"),
+				instant: ("opacity " + (duration / 1000) + "s " + easing + " 0s")
+			});
+		}
+
+		if (transform.generated.initial) {
+			transition.fragments.push({
+				delayed: ((transform.property) + " " + (duration / 1000) + "s " + easing + " " + (delay / 1000) + "s"),
+				instant: ((transform.property) + " " + (duration / 1000) + "s " + easing + " 0s")
+			});
+		}
+
+		/**
+		 * The default computed transition property should be undefined, or one of:
+		 * '' || 'none 0s ease 0s' || 'all 0s ease 0s' || 'all 0s 0s cubic-bezier()'
+		 */
+		var hasCustomTransition =
+			transition.computed && !transition.computed.match(/all 0s|none 0s/);
+
+		if (hasCustomTransition) {
+			transition.fragments.unshift({
+				delayed: transition.computed,
+				instant: transition.computed
+			});
+		}
+
+		var composed = transition.fragments.reduce(
+			function (composition, fragment, i) {
+				composition.delayed += i === 0 ? fragment.delayed : (", " + (fragment.delayed));
+				composition.instant += i === 0 ? fragment.instant : (", " + (fragment.instant));
+				return composition
+			},
+			{
+				delayed: '',
+				instant: ''
+			}
+		);
+
+		transition.generated = {
+			delayed: ((transition.property) + ": " + (composed.delayed) + ";"),
+			instant: ((transition.property) + ": " + (composed.instant) + ";")
+		};
+	} else {
+		transition.generated = {
+			delayed: '',
+			instant: ''
+		};
+	}
+
+	return {
+		inline: inline,
+		opacity: opacity,
+		position: position,
+		transform: transform,
+		transition: transition
+	}
+}
+
+/**
+ * apply a CSS string to an element using the CSSOM (element.style) rather
+ * than setAttribute, which may violate the content security policy.
+ *
+ * @param {Node}   [el]  Element to receive styles.
+ * @param {string} [declaration] Styles to apply.
+ */
+function applyStyle (el, declaration) {
+	declaration.split(';').forEach(function (pair) {
+		var ref = pair.split(':');
+		var property = ref[0];
+		var value = ref.slice(1);
+		if (property && value) {
+			el.style[property.trim()] = value.join(':');
+		}
+	});
+}
+
+function clean(target) {
+	var this$1 = this;
+
+	var dirty;
+	try {
+		each(tealight_es(target), function (node) {
+			var id = node.getAttribute('data-sr-id');
+			if (id !== null) {
+				dirty = true;
+				var element = this$1.store.elements[id];
+				if (element.callbackTimer) {
+					window.clearTimeout(element.callbackTimer.clock);
+				}
+				applyStyle(element.node, element.styles.inline.generated);
+				node.removeAttribute('data-sr-id');
+				delete this$1.store.elements[id];
+			}
+		});
+	} catch (e) {
+		return logger.call(this, 'Clean failed.', e.message)
+	}
+
+	if (dirty) {
+		try {
+			rinse.call(this);
+		} catch (e) {
+			return logger.call(this, 'Clean failed.', e.message)
+		}
+	}
+}
+
+function destroy() {
+	var this$1 = this;
+
+	/**
+	 * Remove all generated styles and element ids
+	 */
+	each(this.store.elements, function (element) {
+		applyStyle(element.node, element.styles.inline.generated);
+		element.node.removeAttribute('data-sr-id');
+	});
+
+	/**
+	 * Remove all event listeners.
+	 */
+	each(this.store.containers, function (container) {
+		var target =
+			container.node === document.documentElement ? window : container.node;
+		target.removeEventListener('scroll', this$1.delegate);
+		target.removeEventListener('resize', this$1.delegate);
+	});
+
+	/**
+	 * Clear all data from the store
+	 */
+	this.store = {
+		containers: {},
+		elements: {},
+		history: [],
+		sequences: {}
+	};
+}
+
+function deepAssign(target) {
+	var sources = [], len = arguments.length - 1;
+	while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
+
+	if (isObject(target)) {
+		each(sources, function (source) {
+			each(source, function (data, key) {
+				if (isObject(data)) {
+					if (!target[key] || !isObject(target[key])) {
+						target[key] = {};
+					}
+					deepAssign(target[key], data);
+				} else {
+					target[key] = data;
+				}
+			});
+		});
+		return target
+	} else {
+		throw new TypeError('Target must be an object literal.')
+	}
+}
+
+function isMobile(agent) {
+	if ( agent === void 0 ) agent = navigator.userAgent;
+
+	return /Android|iPhone|iPad|iPod/i.test(agent)
+}
+
+var nextUniqueId = (function () {
+	var uid = 0;
+	return function () { return uid++; }
+})();
+
+function initialize() {
+	var this$1 = this;
+
+	rinse.call(this);
+
+	each(this.store.elements, function (element) {
+		var styles = [element.styles.inline.generated];
+
+		if (element.visible) {
+			styles.push(element.styles.opacity.computed);
+			styles.push(element.styles.transform.generated.final);
+			element.revealed = true;
+		} else {
+			styles.push(element.styles.opacity.generated);
+			styles.push(element.styles.transform.generated.initial);
+			element.revealed = false;
+		}
+
+		applyStyle(element.node, styles.filter(function (s) { return s !== ''; }).join(' '));
+	});
+
+	each(this.store.containers, function (container) {
+		var target =
+			container.node === document.documentElement ? window : container.node;
+		target.addEventListener('scroll', this$1.delegate);
+		target.addEventListener('resize', this$1.delegate);
+	});
+
+	/**
+	 * Manually invoke delegate once to capture
+	 * element and container dimensions, container
+	 * scroll position, and trigger any valid reveals
+	 */
+	this.delegate();
+
+	/**
+	 * Wipe any existing `setTimeout` now
+	 * that initialization has completed.
+	 */
+	this.initTimeout = null;
+}
+
+function animate(element, force) {
+	if ( force === void 0 ) force = {};
+
+	var pristine = force.pristine || this.pristine;
+	var delayed =
+		element.config.useDelay === 'always' ||
+		(element.config.useDelay === 'onload' && pristine) ||
+		(element.config.useDelay === 'once' && !element.seen);
+
+	var shouldReveal = element.visible && !element.revealed;
+	var shouldReset = !element.visible && element.revealed && element.config.reset;
+
+	if (force.reveal || shouldReveal) {
+		return triggerReveal.call(this, element, delayed)
+	}
+
+	if (force.reset || shouldReset) {
+		return triggerReset.call(this, element)
+	}
+}
+
+function triggerReveal(element, delayed) {
+	var styles = [
+		element.styles.inline.generated,
+		element.styles.opacity.computed,
+		element.styles.transform.generated.final
+	];
+	if (delayed) {
+		styles.push(element.styles.transition.generated.delayed);
+	} else {
+		styles.push(element.styles.transition.generated.instant);
+	}
+	element.revealed = element.seen = true;
+	applyStyle(element.node, styles.filter(function (s) { return s !== ''; }).join(' '));
+	registerCallbacks.call(this, element, delayed);
+}
+
+function triggerReset(element) {
+	var styles = [
+		element.styles.inline.generated,
+		element.styles.opacity.generated,
+		element.styles.transform.generated.initial,
+		element.styles.transition.generated.instant
+	];
+	element.revealed = false;
+	applyStyle(element.node, styles.filter(function (s) { return s !== ''; }).join(' '));
+	registerCallbacks.call(this, element);
+}
+
+function registerCallbacks(element, isDelayed) {
+	var this$1 = this;
+
+	var duration = isDelayed
+		? element.config.duration + element.config.delay
+		: element.config.duration;
+
+	var beforeCallback = element.revealed
+		? element.config.beforeReveal
+		: element.config.beforeReset;
+
+	var afterCallback = element.revealed
+		? element.config.afterReveal
+		: element.config.afterReset;
+
+	var elapsed = 0;
+	if (element.callbackTimer) {
+		elapsed = Date.now() - element.callbackTimer.start;
+		window.clearTimeout(element.callbackTimer.clock);
+	}
+
+	beforeCallback(element.node);
+
+	element.callbackTimer = {
+		start: Date.now(),
+		clock: window.setTimeout(function () {
+			afterCallback(element.node);
+			element.callbackTimer = null;
+			if (element.revealed && !element.config.reset && element.config.cleanup) {
+				clean.call(this$1, element.node);
+			}
+		}, duration - elapsed)
+	};
+}
+
+function sequence(element, pristine) {
+	if ( pristine === void 0 ) pristine = this.pristine;
+
+	/**
+	 * We first check if the element should reset.
+	 */
+	if (!element.visible && element.revealed && element.config.reset) {
+		return animate.call(this, element, { reset: true })
+	}
+
+	var seq = this.store.sequences[element.sequence.id];
+	var i = element.sequence.index;
+
+	if (seq) {
+		var visible = new SequenceModel(seq, 'visible', this.store);
+		var revealed = new SequenceModel(seq, 'revealed', this.store);
+
+		seq.models = { visible: visible, revealed: revealed };
+
+		/**
+		 * If the sequence has no revealed members,
+		 * then we reveal the first visible element
+		 * within that sequence.
+		 *
+		 * The sequence then cues a recursive call
+		 * in both directions.
+		 */
+		if (!revealed.body.length) {
+			var nextId = seq.members[visible.body[0]];
+			var nextElement = this.store.elements[nextId];
+
+			if (nextElement) {
+				cue.call(this, seq, visible.body[0], -1, pristine);
+				cue.call(this, seq, visible.body[0], +1, pristine);
+				return animate.call(this, nextElement, { reveal: true, pristine: pristine })
+			}
+		}
+
+		/**
+		 * If our element isn’t resetting, we check the
+		 * element sequence index against the head, and
+		 * then the foot of the sequence.
+		 */
+		if (
+			!seq.blocked.head &&
+			i === [].concat( revealed.head ).pop() &&
+			i >= [].concat( visible.body ).shift()
+		) {
+			cue.call(this, seq, i, -1, pristine);
+			return animate.call(this, element, { reveal: true, pristine: pristine })
+		}
+
+		if (
+			!seq.blocked.foot &&
+			i === [].concat( revealed.foot ).shift() &&
+			i <= [].concat( visible.body ).pop()
+		) {
+			cue.call(this, seq, i, +1, pristine);
+			return animate.call(this, element, { reveal: true, pristine: pristine })
+		}
+	}
+}
+
+function Sequence(interval) {
+	var i = Math.abs(interval);
+	if (!isNaN(i)) {
+		this.id = nextUniqueId();
+		this.interval = Math.max(i, 16);
+		this.members = [];
+		this.models = {};
+		this.blocked = {
+			head: false,
+			foot: false
+		};
+	} else {
+		throw new RangeError('Invalid sequence interval.')
+	}
+}
+
+function SequenceModel(seq, prop, store) {
+	var this$1 = this;
+
+	this.head = [];
+	this.body = [];
+	this.foot = [];
+
+	each(seq.members, function (id, index) {
+		var element = store.elements[id];
+		if (element && element[prop]) {
+			this$1.body.push(index);
+		}
+	});
+
+	if (this.body.length) {
+		each(seq.members, function (id, index) {
+			var element = store.elements[id];
+			if (element && !element[prop]) {
+				if (index < this$1.body[0]) {
+					this$1.head.push(index);
+				} else {
+					this$1.foot.push(index);
+				}
+			}
+		});
+	}
+}
+
+function cue(seq, i, direction, pristine) {
+	var this$1 = this;
+
+	var blocked = ['head', null, 'foot'][1 + direction];
+	var nextId = seq.members[i + direction];
+	var nextElement = this.store.elements[nextId];
+
+	seq.blocked[blocked] = true;
+
+	setTimeout(function () {
+		seq.blocked[blocked] = false;
+		if (nextElement) {
+			sequence.call(this$1, nextElement, pristine);
+		}
+	}, seq.interval);
+}
+
+function reveal(target, options, syncing) {
+	var this$1 = this;
+	if ( options === void 0 ) options = {};
+	if ( syncing === void 0 ) syncing = false;
+
+	var containerBuffer = [];
+	var sequence$$1;
+	var interval = options.interval || defaults.interval;
+
+	try {
+		if (interval) {
+			sequence$$1 = new Sequence(interval);
+		}
+
+		var nodes = tealight_es(target);
+		if (!nodes.length) {
+			throw new Error('Invalid reveal target.')
+		}
+
+		var elements = nodes.reduce(function (elementBuffer, elementNode) {
+			var element = {};
+			var existingId = elementNode.getAttribute('data-sr-id');
+
+			if (existingId) {
+				deepAssign(element, this$1.store.elements[existingId]);
+
+				/**
+				 * In order to prevent previously generated styles
+				 * from throwing off the new styles, the style tag
+				 * has to be reverted to its pre-reveal state.
+				 */
+				applyStyle(element.node, element.styles.inline.computed);
+			} else {
+				element.id = nextUniqueId();
+				element.node = elementNode;
+				element.seen = false;
+				element.revealed = false;
+				element.visible = false;
+			}
+
+			var config = deepAssign({}, element.config || this$1.defaults, options);
+
+			if ((!config.mobile && isMobile()) || (!config.desktop && !isMobile())) {
+				if (existingId) {
+					clean.call(this$1, element);
+				}
+				return elementBuffer // skip elements that are disabled
+			}
+
+			var containerNode = tealight_es(config.container)[0];
+			if (!containerNode) {
+				throw new Error('Invalid container.')
+			}
+			if (!containerNode.contains(elementNode)) {
+				return elementBuffer // skip elements found outside the container
+			}
+
+			var containerId;
+			{
+				containerId = getContainerId(
+					containerNode,
+					containerBuffer,
+					this$1.store.containers
+				);
+				if (containerId === null) {
+					containerId = nextUniqueId();
+					containerBuffer.push({ id: containerId, node: containerNode });
+				}
+			}
+
+			element.config = config;
+			element.containerId = containerId;
+			element.styles = style(element);
+
+			if (sequence$$1) {
+				element.sequence = {
+					id: sequence$$1.id,
+					index: sequence$$1.members.length
+				};
+				sequence$$1.members.push(element.id);
+			}
+
+			elementBuffer.push(element);
+			return elementBuffer
+		}, []);
+
+		/**
+		 * Modifying the DOM via setAttribute needs to be handled
+		 * separately from reading computed styles in the map above
+		 * for the browser to batch DOM changes (limiting reflows)
+		 */
+		each(elements, function (element) {
+			this$1.store.elements[element.id] = element;
+			element.node.setAttribute('data-sr-id', element.id);
+		});
+	} catch (e) {
+		return logger.call(this, 'Reveal failed.', e.message)
+	}
+
+	/**
+	 * Now that element set-up is complete...
+	 * Let’s commit any container and sequence data we have to the store.
+	 */
+	each(containerBuffer, function (container) {
+		this$1.store.containers[container.id] = {
+			id: container.id,
+			node: container.node
+		};
+	});
+	if (sequence$$1) {
+		this.store.sequences[sequence$$1.id] = sequence$$1;
+	}
+
+	/**
+	 * If reveal wasn't invoked by sync, we want to
+	 * make sure to add this call to the history.
+	 */
+	if (syncing !== true) {
+		this.store.history.push({ target: target, options: options });
+
+		/**
+		 * Push initialization to the event queue, giving
+		 * multiple reveal calls time to be interpreted.
+		 */
+		if (this.initTimeout) {
+			window.clearTimeout(this.initTimeout);
+		}
+		this.initTimeout = window.setTimeout(initialize.bind(this), 0);
+	}
+}
+
+function getContainerId(node) {
+	var collections = [], len = arguments.length - 1;
+	while ( len-- > 0 ) collections[ len ] = arguments[ len + 1 ];
+
+	var id = null;
+	each(collections, function (collection) {
+		each(collection, function (container) {
+			if (id === null && container.node === node) {
+				id = container.id;
+			}
+		});
+	});
+	return id
+}
+
+/**
+ * Re-runs the reveal method for each record stored in history,
+ * for capturing new content asynchronously loaded into the DOM.
+ */
+function sync() {
+	var this$1 = this;
+
+	each(this.store.history, function (record) {
+		reveal.call(this$1, record.target, record.options, true);
+	});
+
+	initialize.call(this);
+}
+
+var scrollreveal_es_polyfill = function (x) { return (x > 0) - (x < 0) || +x; };
+var mathSign = Math.sign || scrollreveal_es_polyfill;
+
+function getGeometry(target, isContainer) {
+	/**
+	 * We want to ignore padding and scrollbars for container elements.
+	 * More information here: https://goo.gl/vOZpbz
+	 */
+	var height = isContainer ? target.node.clientHeight : target.node.offsetHeight;
+	var width = isContainer ? target.node.clientWidth : target.node.offsetWidth;
+
+	var offsetTop = 0;
+	var offsetLeft = 0;
+	var node = target.node;
+
+	do {
+		if (!isNaN(node.offsetTop)) {
+			offsetTop += node.offsetTop;
+		}
+		if (!isNaN(node.offsetLeft)) {
+			offsetLeft += node.offsetLeft;
+		}
+		node = node.offsetParent;
+	} while (node)
+
+	return {
+		bounds: {
+			top: offsetTop,
+			right: offsetLeft + width,
+			bottom: offsetTop + height,
+			left: offsetLeft
+		},
+		height: height,
+		width: width
+	}
+}
+
+function getScrolled(container) {
+	var top, left;
+	if (container.node === document.documentElement) {
+		top = window.pageYOffset;
+		left = window.pageXOffset;
+	} else {
+		top = container.node.scrollTop;
+		left = container.node.scrollLeft;
+	}
+	return { top: top, left: left }
+}
+
+function isElementVisible(element) {
+	if ( element === void 0 ) element = {};
+
+	var container = this.store.containers[element.containerId];
+	if (!container) { return }
+
+	var viewFactor = Math.max(0, Math.min(1, element.config.viewFactor));
+	var viewOffset = element.config.viewOffset;
+
+	var elementBounds = {
+		top: element.geometry.bounds.top + element.geometry.height * viewFactor,
+		right: element.geometry.bounds.right - element.geometry.width * viewFactor,
+		bottom: element.geometry.bounds.bottom - element.geometry.height * viewFactor,
+		left: element.geometry.bounds.left + element.geometry.width * viewFactor
+	};
+
+	var containerBounds = {
+		top: container.geometry.bounds.top + container.scroll.top + viewOffset.top,
+		right: container.geometry.bounds.right + container.scroll.left - viewOffset.right,
+		bottom:
+			container.geometry.bounds.bottom + container.scroll.top - viewOffset.bottom,
+		left: container.geometry.bounds.left + container.scroll.left + viewOffset.left
+	};
+
+	return (
+		(elementBounds.top < containerBounds.bottom &&
+			elementBounds.right > containerBounds.left &&
+			elementBounds.bottom > containerBounds.top &&
+			elementBounds.left < containerBounds.right) ||
+		element.styles.position === 'fixed'
+	)
+}
+
+function delegate(
+	event,
+	elements
+) {
+	var this$1 = this;
+	if ( event === void 0 ) event = { type: 'init' };
+	if ( elements === void 0 ) elements = this.store.elements;
+
+	miniraf_es(function () {
+		var stale = event.type === 'init' || event.type === 'resize';
+
+		each(this$1.store.containers, function (container) {
+			if (stale) {
+				container.geometry = getGeometry.call(this$1, container, true);
+			}
+			var scroll = getScrolled.call(this$1, container);
+			if (container.scroll) {
+				container.direction = {
+					x: mathSign(scroll.left - container.scroll.left),
+					y: mathSign(scroll.top - container.scroll.top)
+				};
+			}
+			container.scroll = scroll;
+		});
+
+		/**
+		 * Due to how the sequencer is implemented, it’s
+		 * important that we update the state of all
+		 * elements, before any animation logic is
+		 * evaluated (in the second loop below).
+		 */
+		each(elements, function (element) {
+			if (stale || element.geometry === undefined) {
+				element.geometry = getGeometry.call(this$1, element);
+			}
+			element.visible = isElementVisible.call(this$1, element);
+		});
+
+		each(elements, function (element) {
+			if (element.sequence) {
+				sequence.call(this$1, element);
+			} else {
+				animate.call(this$1, element);
+			}
+		});
+
+		this$1.pristine = false;
+	});
+}
+
+function isTransformSupported() {
+	var style = document.documentElement.style;
+	return 'transform' in style || 'WebkitTransform' in style
+}
+
+function isTransitionSupported() {
+	var style = document.documentElement.style;
+	return 'transition' in style || 'WebkitTransition' in style
+}
+
+var version = "4.0.9";
+
+var boundDelegate;
+var boundDestroy;
+var boundReveal;
+var boundClean;
+var boundSync;
+var scrollreveal_es_config;
+var debug;
+var instance;
+
+function ScrollReveal(options) {
+	if ( options === void 0 ) options = {};
+
+	var invokedWithoutNew =
+		typeof this === 'undefined' ||
+		Object.getPrototypeOf(this) !== ScrollReveal.prototype;
+
+	if (invokedWithoutNew) {
+		return new ScrollReveal(options)
+	}
+
+	if (!ScrollReveal.isSupported()) {
+		logger.call(this, 'Instantiation failed.', 'This browser is not supported.');
+		return mount.failure()
+	}
+
+	var buffer;
+	try {
+		buffer = scrollreveal_es_config
+			? deepAssign({}, scrollreveal_es_config, options)
+			: deepAssign({}, defaults, options);
+	} catch (e) {
+		logger.call(this, 'Invalid configuration.', e.message);
+		return mount.failure()
+	}
+
+	try {
+		var container = tealight_es(buffer.container)[0];
+		if (!container) {
+			throw new Error('Invalid container.')
+		}
+	} catch (e) {
+		logger.call(this, e.message);
+		return mount.failure()
+	}
+
+	scrollreveal_es_config = buffer;
+
+	if ((!scrollreveal_es_config.mobile && isMobile()) || (!scrollreveal_es_config.desktop && !isMobile())) {
+		logger.call(
+			this,
+			'This device is disabled.',
+			("desktop: " + (scrollreveal_es_config.desktop)),
+			("mobile: " + (scrollreveal_es_config.mobile))
+		);
+		return mount.failure()
+	}
+
+	mount.success();
+
+	this.store = {
+		containers: {},
+		elements: {},
+		history: [],
+		sequences: {}
+	};
+
+	this.pristine = true;
+
+	boundDelegate = boundDelegate || delegate.bind(this);
+	boundDestroy = boundDestroy || destroy.bind(this);
+	boundReveal = boundReveal || reveal.bind(this);
+	boundClean = boundClean || clean.bind(this);
+	boundSync = boundSync || sync.bind(this);
+
+	Object.defineProperty(this, 'delegate', { get: function () { return boundDelegate; } });
+	Object.defineProperty(this, 'destroy', { get: function () { return boundDestroy; } });
+	Object.defineProperty(this, 'reveal', { get: function () { return boundReveal; } });
+	Object.defineProperty(this, 'clean', { get: function () { return boundClean; } });
+	Object.defineProperty(this, 'sync', { get: function () { return boundSync; } });
+
+	Object.defineProperty(this, 'defaults', { get: function () { return scrollreveal_es_config; } });
+	Object.defineProperty(this, 'version', { get: function () { return version; } });
+	Object.defineProperty(this, 'noop', { get: function () { return false; } });
+
+	return instance ? instance : (instance = this)
+}
+
+ScrollReveal.isSupported = function () { return isTransformSupported() && isTransitionSupported(); };
+
+Object.defineProperty(ScrollReveal, 'debug', {
+	get: function () { return debug || false; },
+	set: function (value) { return (debug = typeof value === 'boolean' ? value : debug); }
+});
+
+ScrollReveal();
+
+/* harmony default export */ var scrollreveal_es = (ScrollReveal);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaScrollReveal.vue?vue&type=script&lang=js&
+
+/* harmony default export */ var FuiMambaScrollRevealvue_type_script_lang_js_ = ({
+  name: "FuiMambaScrollReveal",
+  mounted: function mounted() {
+    var sr = scrollreveal_es({
+      distance: '60px',
+      duration: 2500,
+      delay: 400
+    });
+    sr.reveal(".home__header, .section__title", {
+      delay: 600
+    });
+    sr.reveal(".home__footer", {
+      delay: 700
+    });
+    sr.reveal(".home__img", {
+      delay: 900,
+      origin: 'top'
+    });
+    sr.reveal(".sponsor__img, .products__card, .footer__logo, .footer__content, .footer__copy", {
+      origin: 'top',
+      interval: 200
+    });
+    sr.reveal(".specs__data, .discount__animate", {
+      origin: 'left',
+      interval: 100
+    });
+    sr.reveal(".specs__img, .discount__img", {
+      origin: 'right'
+    });
+    sr.reveal(".case__img", {
+      origin: 'top'
+    });
+    sr.reveal(".case__data");
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollReveal.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaScrollRevealvue_type_script_lang_js_ = (FuiMambaScrollRevealvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaScrollReveal.vue
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaScrollReveal_component = normalizeComponent(
+  mamba_FuiMambaScrollRevealvue_type_script_lang_js_,
+  FuiMambaScrollRevealvue_type_template_id_53e6378c_render,
+  FuiMambaScrollRevealvue_type_template_id_53e6378c_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaScrollReveal = (FuiMambaScrollReveal_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3e46748d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaTheme.vue?vue&type=template&id=b7fb2fa8&
+var FuiMambaThemevue_type_template_id_b7fb2fa8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c("div")}
+var FuiMambaThemevue_type_template_id_b7fb2fa8_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaTheme.vue?vue&type=template&id=b7fb2fa8&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/mamba/FuiMambaTheme.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+/* harmony default export */ var FuiMambaThemevue_type_script_lang_js_ = ({
+  name: "FuiMambaTheme",
+  mounted: function mounted() {
+    document.body.classList.add('usingFuiMambaApp');
+  }
+});
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaTheme.vue?vue&type=script&lang=js&
+ /* harmony default export */ var mamba_FuiMambaThemevue_type_script_lang_js_ = (FuiMambaThemevue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/mamba/FuiMambaTheme.vue?vue&type=style&index=0&lang=css&
+var FuiMambaThemevue_type_style_index_0_lang_css_ = __webpack_require__("0d23");
+
+// CONCATENATED MODULE: ./src/components/mamba/FuiMambaTheme.vue
+
+
+
+
+
+
+/* normalize component */
+
+var FuiMambaTheme_component = normalizeComponent(
+  mamba_FuiMambaThemevue_type_script_lang_js_,
+  FuiMambaThemevue_type_template_id_b7fb2fa8_render,
+  FuiMambaThemevue_type_template_id_b7fb2fa8_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var FuiMambaTheme = (FuiMambaTheme_component.exports);
 // CONCATENATED MODULE: ./index.js
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-import */
 
 
 
@@ -2777,56 +6870,54 @@ var FuiAlexaApp_component = normalizeComponent(
 
 
 
-/*
-
-import FuiMambaApp from "./components/mamba/FuiMambaApp";
-import FuiMambaNavbar from "./components/mamba/FuiMambaNavbar";
-import FuiMambaHome from "./components/mamba/FuiMambaHome";
-import FuiMambaSponsor from "./components/mamba/FuiMambaSponsor";
-import FuiMambaSpecs from "./components/mamba/FuiMambaSpecs";
-import FuiMambaCase from "./components/mamba/FuiMambaCase";
-import FuiMambaDiscount from "./components/mamba/FuiMambaDiscount";
-import FuiMambaProducts from "./components/mamba/FuiMambaProducts";
-import FuiMambaFooter from "./components/mamba/FuiMambaFooter";
-import FuiMambaScrollUp from "./components/mamba/FuiMambaScrollUp";
-import FuiMambaScrollReveal from "./components/mamba/FuiMambaScrollReveal";
-import FuiMambaScrollbarTheme from "./components/mamba/FuiMambaScrollReveal";
-import FuiMambaTheme from "./components/mamba/FuiMambaTheme";
 
 
-export {
-    FuiAlexaFooter,
-    FuiAlexaContact,
-    FuiAlexaTestimonial,
-    FuiAlexaProject,
-    FuiAlexaPortfolio,
-    FuiAlexaServices,
-    FuiAlexaQualification,
-    FuiAlexaSkills,
-    FuiAlexaAbout,
-    FuiAlexaHome,
-    FuiAlexaNavbar,
-    FuiAlexaApp,
-    FuiAlexaScrollbarTheme,
-    FuiAlexaTheme,
 
-    FuiMambaTheme,
-    FuiMambaScrollbarTheme,
-    FuiMambaScrollReveal,
-    FuiMambaScrollUp,
-    FuiMambaFooter,
-    FuiMambaProducts,
-    FuiMambaDiscount,
-    FuiMambaCase,
-    FuiMambaSpecs,
-    FuiMambaSponsor,
-    FuiMambaHome,
-    FuiMambaNavbar,
-    FuiMambaApp
-}*/
+
+
+
+
+
+
+
+
+
+
+
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib-no-default.js
 
 
+
+
+/***/ }),
+
+/***/ "fc6a":
+/***/ (function(module, exports, __webpack_require__) {
+
+// toObject with fallback for non-array-like ES3 strings
+var IndexedObject = __webpack_require__("44ad");
+var requireObjectCoercible = __webpack_require__("1d80");
+
+module.exports = function (it) {
+  return IndexedObject(requireObjectCoercible(it));
+};
+
+
+/***/ }),
+
+/***/ "fce3":
+/***/ (function(module, exports, __webpack_require__) {
+
+var fails = __webpack_require__("d039");
+var global = __webpack_require__("da84");
+
+// babel-minify and Closure Compiler transpiles RegExp('.', 's') -> /./s and it causes SyntaxError
+var $RegExp = global.RegExp;
+
+module.exports = fails(function () {
+  var re = $RegExp('.', 's');
+  return !(re.dotAll && re.exec('\n') && re.flags === 's');
+});
 
 
 /***/ }),
@@ -2888,4 +6979,4 @@ module.exports = NATIVE_SYMBOL
 
 /******/ });
 });
-//# sourceMappingURL=test-app-flamento.umd.js.map
+//# sourceMappingURL=fui-kit.umd.js.map
