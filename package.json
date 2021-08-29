@@ -1,6 +1,6 @@
 {
   "name": "test-app-flamento",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name test-app-flamento index.js"
