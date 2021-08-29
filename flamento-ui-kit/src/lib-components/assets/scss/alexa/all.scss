@@ -1,0 +1,17 @@
+@import "global";
+.fui__alexa {
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  transition: 0.3s;
+  @import "setup";
+  @import "nav";
+  @import "home";
+  @import "about";
+  @import "skills";
+  @import "qualification";
+  @import "services";
+  @import "project";
+  @import "testimonial";
+  @import "contact";
+  @import "footer";
+}

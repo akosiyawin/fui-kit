@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css");
+
+
+:root {
+  --fui-mamba-header-height: 3rem;
+
+  //Colors
+  --fui-mamba-hue-color: 206;
+  --fui-mamba-black-color: hsl(var(--fui-mamba-hue-color),4%,4%);
+  --fui-mamba-black-color-alt: hsl(var(--fui-mamba-hue-color),4%,8%);
+  --fui-mamba-title-color: hsl(var(--fui-mamba-hue-color),4%,95%);
+  --fui-mamba-text-color: hsl(var(--fui-mamba-hue-color),4%,75%);
+  --fui-mamba-text-color-light: hsl(var(--fui-mamba-hue-color),4%,65%);
+  --fui-mamba-white-color: #fff;
+  --fui-mamba-body-color: hsl(var(--fui-mamba-hue-color),4%,6%);
+  --fui-mamba-container-color: hsl(var(--fui-mamba-hue-color),4%,10%);
+  --fui-mamba-text-gradient: linear-gradient(hsl(var(--fui-mamba-hue-color),4%,24%),hsl(var(--fui-mamba-hue-color),4%,8%));
+  --fui-mamba-scroll-thumb-color: hsl(var(--fui-mamba-hue-color),4%,16%);
+  --fui-mamba-scroll-thumb-color-alt: hsl(var(--fui-mamba-hue-color),4%,20%);
+
+  //Typography
+  --fui-mamba-body-font: 'Poppins', sans-serif;
+  --fui-mamba-biggest-font-size: 5rem;
+  --fui-mamba-bigger-font-size: 3.5rem;
+  --fui-mamba-big-font-size: 2.5rem;
+  --fui-mamba-h2-font-size: 1.25rem;
+  --fui-mamba-h3-font-size: 1.125rem;
+  --fui-mamba-normal-font-size: .938rem;
+  --fui-mamba-small-font-size: .813rem;
+  --fui-mamba-smaller-font-size: .75rem;
+  --fui-mamba-text-line-height: 2rem;
+
+  //Font weight
+  --fui-mamba-font-medium: 500;
+  --fui-mamba-font-semi-bold: 600;
+
+  //Margins Bottom
+  --fui-mamba-mb-0-5: .5rem;
+  --fui-mamba-mb-0-75: .75rem;
+  --fui-mamba-mb-1: 1rem;
+  --fui-mamba-mb-1-5: 1.5rem;
+  --fui-mamba-mb-2: 2rem;
+  --fui-mamba-mb-2-5: 2.5rem;
+
+  //Z index
+  --fui-mamba-z-tooltip: 10;
+  --fui-mamba-z-fixed: 100;
+}
+
+
+//Responsive typography
+@media screen and (min-width: 968px) {
+ :root {
+   --fui-mamba-biggest-font-size: 7.5rem;
+   --fui-mamba-bigger-font-size: 4.5rem;
+   --fui-mamba-big-font-size: 4rem;
+   --fui-mamba-h2-font-size: 1.5rem;
+   --fui-mamba-h3-font-size: 1.25rem;
+   --fui-mamba-normal-font-size: 1rem;
+   --fui-mamba-small-font-size: .875rem;
+   --fui-mamba-smaller-font-size: .813rem;
+ }
+}
+
+//Base
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}

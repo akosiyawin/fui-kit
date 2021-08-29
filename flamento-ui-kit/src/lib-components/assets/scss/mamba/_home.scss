@@ -1,0 +1,48 @@
+.home__img {
+  width: 250px;
+  position: absolute;
+  top: -16rem;
+  right: 1.5rem;
+}
+
+.home__data {
+  padding-top: 5rem;
+}
+
+.home__header {
+  position: relative;
+}
+
+.home__title {
+  font-size: var(--fui-mamba-biggest-font-size);
+  background: var(--fui-mamba-text-gradient);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  position: absolute;
+  top: -4rem;
+  left: 1rem;
+  line-height: 6rem;
+}
+
+.home__subtitle {
+  font-size: var(--fui-mamba-big-font-size);
+  margin-bottom: var(--fui-mamba-mb-2-5);
+}
+
+.home__title-description {
+  font-size: var(--fui-mamba-h3-font-size);
+  font-weight: var(--fui-mamba-font-medium);
+  margin-bottom: var(--fui-mamba-mb-1);
+}
+
+.home__description {
+  margin-bottom: var(--fui-mamba-mb-2-5);
+  line-height: var(--fui-mamba-text-line-height);
+}
+
+.home__price {
+  font-size: var(--fui-mamba-h3-font-size);
+  font-weight: var(--fui-mamba-font-semi-bold);
+  margin-left: var(--fui-mamba-mb-0-75);
+}

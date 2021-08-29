@@ -1,0 +1,17 @@
+@import "global";
+
+.fui__mamba {
+  overflow: hidden;
+  font-family: var(--fui-mamba-body-font);
+  font-size: var(--fui-mamba-normal-font-size);
+  @import "setup";
+  @import "nav";
+  @import "home";
+  @import "sponsor";
+  @import "specs";
+  @import "case";
+  @import "discount";
+  @import "products";
+  @import "footer";
+  @import "media";
+}
