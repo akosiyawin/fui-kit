@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <fui-alexa-footer></fui-alexa-footer>
-<!--    <fui-alexa></fui-alexa>-->
+<!--    <fui-alexa-footer></fui-alexa-footer>-->
+    <fui-alexa></fui-alexa>
   </div>
 </template>
 

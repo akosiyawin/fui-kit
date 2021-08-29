@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import "../../assets/scss/alexa/all.css";
 
 export default {
   name: 'FuiAlexaApp',
@@ -21,3 +20,7 @@ export default {
   }
 };
 </script>
+
+<style>
+@import "../../assets/scss/alexa/all.scss";
+</style>
